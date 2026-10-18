@@ -1,0 +1,2164 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clase 11: Archivos de texto | Guía pedagógica</title>
+<style>
+:root{
+  --bg1:#f8fafc;--bg2:#e2e8f0;--card:#ffffff;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;
+  --blue:#3b82f6;--green:#10b981;--orange:#f59e0b;--purple:#8b5cf6;--red:#ef4444;
+  --t-blue:#eff6ff;--t-green:#ecfdf5;--t-orange:#fffbeb;--t-purple:#f5f3ff;--t-red:#fef2f2;
+  --code:#1e293b;--code-ink:#e2e8f0;--shadow:0 1px 3px rgba(15,23,42,.08),0 4px 14px rgba(15,23,42,.05);
+  --docente:#f0f9ff;--docente-b:#0ea5e9;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg1:#0f172a;--bg2:#111c33;--card:#172036;--ink:#e2e8f0;--muted:#94a3b8;--line:#26324a;
+  --t-blue:#172a4a;--t-green:#0f2f2a;--t-orange:#33280f;--t-purple:#261f45;--t-red:#3a1a1f;
+  --code:#0b1222;--code-ink:#e2e8f0;--shadow:0 1px 3px rgba(0,0,0,.4);--docente:#0c2534;
+}}
+:root[data-theme="dark"]{
+  --bg1:#0f172a;--bg2:#111c33;--card:#172036;--ink:#e2e8f0;--muted:#94a3b8;--line:#26324a;
+  --t-blue:#172a4a;--t-green:#0f2f2a;--t-orange:#33280f;--t-purple:#261f45;--t-red:#3a1a1f;
+  --code:#0b1222;--code-ink:#e2e8f0;--shadow:0 1px 3px rgba(0,0,0,.4);--docente:#0c2534;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;color:var(--ink);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2)) fixed;background-color:var(--bg1);line-height:1.55;font-size:16px}
+code,pre,textarea{font-family:"Cascadia Code","JetBrains Mono",Consolas,"Fira Code",ui-monospace,monospace}
+p code,li code,td code,h3 code,.tile code,.alerta code,button code,small code{background:rgba(59,130,246,.12);color:inherit;padding:.05em .35em;border-radius:5px;font-size:.88em}
+a{color:var(--blue)}
+.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-orange{color:var(--orange)}.c-purple{color:var(--purple)}.c-red{color:var(--red)}
+.muted{color:var(--muted);font-size:.92rem}
+
+/* layout */
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;max-width:1440px;margin:0 auto;padding:24px 24px 0}
+aside.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto}
+main{min-width:0}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr);padding:14px 14px 0}aside.side{position:static;max-height:none}}
+
+/* side */
+.side-box{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px;margin-bottom:14px;border:1px solid var(--line)}
+.side-box h4{margin:0 0 10px;font-size:.95rem;display:flex;gap:8px;align-items:center}
+.reloj{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.reloj small{font-size:.9rem;color:var(--muted);font-weight:500}
+.barra{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin:8px 0 12px}
+.barra>span{display:block;height:100%;width:0;background:var(--blue);transition:width .4s}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.agenda{list-style:none;margin:0;padding:0}
+.agenda a{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:9px;text-decoration:none;color:var(--ink);font-size:.92rem;border-left:3px solid transparent}
+.agenda a:hover{background:var(--t-blue)}
+.agenda a span:last-child{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.85rem;white-space:nowrap}
+.agenda a.activo{background:var(--t-blue);border-left-color:var(--blue);font-weight:600}
+.agenda a.hecho{color:var(--muted)}
+.modo{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.92rem}
+.switch{position:relative;width:44px;height:24px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;background:var(--line);border-radius:20px;cursor:pointer;transition:.2s}
+.switch span::before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.switch input:checked+span{background:var(--blue)}
+.switch input:checked+span::before{transform:translateX(20px)}
+.switch input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
+.py-estado{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:10px}
+.py-estado .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.py-estado.listo .dot{background:var(--green)}
+
+/* buttons */
+button{font:inherit;cursor:pointer}
+.btn,.btn-run,.btn-sec{border:0;border-radius:8px;padding:6px 12px;font-size:.88rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn{background:var(--t-blue);color:var(--blue)}
+.btn-run{background:var(--green);color:#fff}
+.btn-run:disabled{opacity:.6;cursor:wait}
+.btn-sec{background:transparent;color:var(--muted);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* hero */
+.hero{text-align:center;padding:34px 10px 26px;position:relative}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);margin:0;line-height:1.1;display:inline-flex;gap:16px;align-items:center;letter-spacing:-.01em}
+.hero h1 i{color:var(--blue)}
+.hero p{color:var(--muted);font-size:1.25rem;margin:10px 0 0}
+.hero .pill{margin-top:14px}
+
+/* sections */
+.seccion{margin:0 0 46px}
+.sec-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.sec-tit{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sec-tit>i{color:var(--blue);font-size:1.5rem;align-self:center}
+.sec-tit h2{margin:0;font-size:1.6rem;line-height:1.2}
+.sec-sub{color:var(--muted);font-size:.98rem}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--t-blue);color:var(--blue);border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.subtema{display:flex;align-items:center;gap:10px;margin:26px 0 12px;font-size:1.15rem}
+.subnum{background:var(--blue);color:#fff;border-radius:8px;padding:1px 9px;font-size:.9rem}
+.submin{margin-left:auto;color:var(--muted);font-size:.85rem;font-weight:500}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.col>*+*{margin-top:14px}
+@media (max-width:1180px){.row2{grid-template-columns:minmax(0,1fr)}}
+
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:18px 20px;border:1px solid var(--line)}
+.card-tit{margin:0 0 10px;font-size:1.05rem;display:flex;gap:9px;align-items:center}
+.card p{margin:.4em 0 .7em}
+.tiles{display:grid;gap:10px;margin:10px 0}
+.tiles.t2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tiles.t3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:600px){.tiles.t2,.tiles.t3{grid-template-columns:1fr}}
+.tile{border-radius:9px;padding:10px 12px;border-left:4px solid}
+.tile p{margin:2px 0 0;font-size:.9rem;color:var(--muted)}
+.tile-tit{font-weight:700;font-size:.95rem;display:flex;gap:7px;align-items:center}
+.t-blue{background:var(--t-blue);border-color:var(--blue)}.t-blue .tile-tit i{color:var(--blue)}
+.t-green{background:var(--t-green);border-color:var(--green)}.t-green .tile-tit i{color:var(--green)}
+.t-orange{background:var(--t-orange);border-color:var(--orange)}.t-orange .tile-tit i{color:var(--orange)}
+.t-purple{background:var(--t-purple);border-color:var(--purple)}.t-purple .tile-tit i{color:var(--purple)}
+.t-red{background:var(--t-red);border-color:var(--red)}.t-red .tile-tit i{color:var(--red)}
+
+/* code window */
+.win{background:var(--code);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.win-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;color:#94a3b8;font-size:.82rem;border-bottom:1px solid rgba(148,163,184,.12)}
+.win-bar .d{width:11px;height:11px;border-radius:50%}
+.win-bar .d:nth-child(1){background:#ef4444}.win-bar .d:nth-child(2){background:#f59e0b}.win-bar .d:nth-child(3){background:#10b981}
+.win-bar .titulo{margin-left:8px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-bar button{background:rgba(148,163,184,.14);color:#cbd5e1;border:0;border-radius:6px;padding:3px 9px;font-size:.78rem;font-weight:600}
+.win-bar button.run{background:#10b981;color:#fff}
+.win pre.py,.win textarea{margin:0;padding:14px 16px;color:var(--code-ink);font-size:.86rem;line-height:1.6;overflow-x:auto;white-space:pre;tab-size:4}
+.win textarea,.editor{width:100%;min-height:160px;border:0;resize:vertical;background:#0f172a;color:#e2e8f0;display:block;font-size:.86rem;line-height:1.6;padding:14px 16px;white-space:pre;overflow:auto}
+.consola{margin:0;padding:12px 16px;background:#020617;color:#cbd5e1;font-size:.84rem;white-space:pre-wrap;border-top:1px solid #1e293b;max-height:340px;overflow:auto}
+.consola .err{color:#fca5a5}
+.consola .ayuda{display:block;margin-top:8px;padding:8px 10px;border-radius:7px;background:rgba(245,158,11,.14);color:#fde68a;font-family:"Segoe UI",system-ui,sans-serif;white-space:normal}
+.consola .meta{color:#64748b}
+.tok-c{color:#64748b;font-style:italic}.tok-s{color:#34d399}.tok-n{color:#60a5fa}.tok-k{color:#c084fc}.tok-b{color:#38bdf8}.tok-m{color:#93c5fd}.tok-v{color:#fbbf24}
+
+/* alert + teacher */
+.alerta{border-radius:12px;border:1px solid rgba(239,68,68,.35);border-left:5px solid var(--red);background:var(--t-red);padding:12px 16px}
+.alerta-tit{font-weight:700;color:var(--red);display:flex;gap:8px;align-items:center;margin-bottom:4px}
+.alerta p{margin:.35em 0}.alerta ul{margin:.3em 0;padding-left:1.2em}
+.alerta .win{margin-top:10px}
+.docente{border-radius:12px;border:1px dashed var(--docente-b);background:var(--docente);padding:12px 16px}
+.docente-tit{font-weight:700;color:var(--docente-b);display:flex;gap:8px;align-items:center;margin-bottom:4px}
+.docente p{margin:.35em 0}
+body.alumno .docente{display:none}
+
+/* tables */
+.tabla-wrap{overflow-x:auto}
+.tabla{width:100%;border-collapse:collapse;font-size:.9rem}
+.tabla th{text-align:left;color:var(--muted);font-weight:600;border-bottom:2px solid var(--line);padding:7px 8px}
+.tabla td{border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
+.tabla .none{color:var(--red);font-weight:600}.tabla .val{color:var(--green);font-weight:600}
+span.none{color:var(--red);font-weight:600}
+.traza{font-variant-numeric:tabular-nums;margin:10px 0}
+.traza td,.traza th{text-align:center}
+
+/* comparar */
+.comparar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.comparar>div{border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.comparar span{font-weight:700;font-size:.88rem}
+.comparar code{background:transparent!important;padding:0!important;font-size:.88rem}
+.comparar small{color:var(--muted)}
+.mal{background:var(--t-red)}.mal span{color:var(--red)}
+.bien{background:var(--t-green)}.bien span{color:var(--green)}
+.lista-ok{padding-left:1.2em;margin:.5em 0}.lista-ok li{margin:.25em 0}
+
+/* index guide */
+.idx-guia{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:8px 0 12px}
+.idx{display:flex;flex-direction:column;align-items:center;gap:2px}
+.idx .v{border-radius:8px;padding:8px 14px;font-weight:700;border-left:0;color:#fff}
+.idx .t-blue{background:var(--blue)}.idx .t-green{background:var(--green)}.idx .t-orange{background:var(--orange)}.idx .t-purple{background:var(--purple)}
+.idx small{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.idx small.neg{color:var(--red)}
+
+/* chips */
+.chip-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:4px 11px;font-size:.84rem}
+.chip-btn.on{background:var(--t-blue);border-color:var(--blue);color:var(--blue);font-weight:600}
+.chip-btn.accion{border-color:var(--green);color:var(--green)}
+.chip-btn code{background:transparent!important;padding:0!important}
+
+/* alias sim */
+.alias{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}
+.alias-ctrl{display:flex;gap:6px;flex-wrap:wrap}
+.alias-mem{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0 6px;min-height:90px;align-items:flex-end}
+.obj{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.etqs{display:flex;gap:6px}
+.etq{background:var(--orange);color:#fff;font-weight:700;border-radius:6px;padding:1px 10px;font-family:"Cascadia Code",Consolas,monospace;position:relative}
+.etq::after{content:"↓";position:absolute;left:50%;transform:translateX(-50%);bottom:-19px;color:var(--muted);font-weight:400}
+.caja{display:flex;border:2px solid var(--blue);border-radius:9px;overflow:hidden;margin-top:12px}
+.caja span{padding:6px 12px;border-right:1px solid var(--line);font-family:"Cascadia Code",Consolas,monospace;background:var(--card)}
+.caja span:last-child{border-right:0}
+.caja span.nuevo{background:var(--t-green);color:var(--green);font-weight:700}
+.obj small{color:var(--muted);font-size:.78rem;font-family:"Cascadia Code",Consolas,monospace}
+.alias-msg{font-size:.92rem;margin:4px 0 0;min-height:2.6em}
+
+/* slicer */
+.slicer{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.slicer-in{display:flex;align-items:center;gap:3px;font-size:1.05rem;flex-wrap:wrap}
+.slicer-in code{background:transparent!important;font-weight:700}
+.slicer-in input{width:64px;padding:5px 6px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);font:inherit;font-size:.95rem;text-align:center}
+.slicer-pres{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+.slicer-celdas{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:12px 0 6px}
+.celda{width:54px;border:2px solid var(--line);border-radius:9px;text-align:center;padding:4px 0;position:relative;transition:.2s}
+.celda b{display:block;font-size:1rem}
+.celda small{display:block;font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.celda.sel{border-color:var(--green);background:var(--t-green)}
+.celda .ord{position:absolute;top:-10px;right:-8px;background:var(--green);color:#fff;font-size:.7rem;border-radius:9px;padding:0 6px;font-weight:700}
+.slicer-res{text-align:center;font-family:"Cascadia Code",Consolas,monospace;font-size:.95rem}
+.slicer-res .err{color:var(--red)}
+
+/* ejercicios */
+.nivel-tit{display:flex;gap:10px;align-items:center;font-size:1.15rem;margin:30px 0 12px}
+.niveles{display:flex;gap:7px;flex-wrap:wrap}
+.ej-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.ej-grid.dios{grid-template-columns:1fr}
+.ej{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line);border-top:4px solid;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.n-basico{border-top-color:var(--green)}.n-intermedio{border-top-color:var(--orange)}.n-avanzado{border-top-color:var(--red)}.n-dios{border-top-color:var(--purple)}
+.ej-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ej-head h4{margin:0;font-size:1.02rem;flex:1;min-width:180px}
+.ej-id{font-weight:800;color:var(--muted);font-size:.85rem}
+.ej-enun p{margin:0}
+.badge{border-radius:20px;padding:3px 10px;font-size:.78rem;font-weight:700;display:inline-flex;gap:5px;align-items:center}
+.b-basico{background:var(--t-green);color:var(--green)}.b-intermedio{background:var(--t-orange);color:#d97706}.b-avanzado{background:var(--t-red);color:var(--red)}.b-dios{background:var(--t-purple);color:var(--purple)}
+.salida-esp{background:var(--t-blue);border-radius:9px;padding:8px 12px}
+.salida-esp span{font-size:.8rem;font-weight:700;color:var(--blue)}
+.salida-esp pre{margin:4px 0 0;font-size:.82rem;white-space:pre-wrap}
+.practica{border-radius:10px;overflow:hidden;background:var(--code)}
+.practica-bar{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;color:#94a3b8;font-size:.82rem;gap:8px;flex-wrap:wrap}
+.practica-btns{display:flex;gap:6px}
+.practica .btn-sec{color:#cbd5e1;border-color:#334155;padding:3px 9px;font-size:.8rem}
+.practica .btn-run{padding:3px 10px;font-size:.8rem}
+details{border:1px solid var(--line);border-radius:10px;padding:0 12px}
+details summary{cursor:pointer;padding:9px 0;font-weight:600;font-size:.92rem;display:flex;gap:7px;align-items:center;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:1.1rem}
+details[open] summary::after{content:"−"}
+details>div{padding:0 0 12px}
+details.pista summary{color:#d97706}
+details.solucion summary{color:var(--green)}
+details h5{margin:12px 0 4px;font-size:.95rem}
+.pasos{padding-left:1.3em;margin:.4em 0 .8em}.pasos li{margin:.3em 0}
+details .win{margin-top:8px}
+
+/* pausa */
+.pausa-in{display:flex;gap:18px;align-items:center;background:var(--card);border-radius:14px;padding:20px 24px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.pausa-in i{font-size:2rem;color:var(--orange)}
+.pausa-in h2{margin:0;font-size:1.3rem}.pausa-in p{margin:2px 0 0;color:var(--muted)}
+
+/* quiz */
+.q{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.q:last-child{border-bottom:0}
+.q-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--t-blue);color:var(--blue);font-weight:700;display:grid;place-items:center;font-size:.85rem}
+.q-body{flex:1;min-width:0}
+pre.q-code{background:var(--code);color:var(--code-ink);border-radius:9px;padding:10px 12px;margin:0 0 8px;font-size:.84rem;overflow-x:auto}
+.q-ops{display:flex;flex-wrap:wrap;gap:6px}
+.q-op{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:4px 12px;font-family:"Cascadia Code",Consolas,monospace;font-size:.85rem}
+.q-op.ok{background:var(--t-green);border-color:var(--green);color:var(--green);font-weight:700}
+.q-op.no{background:var(--t-red);border-color:var(--red);color:var(--red)}
+.q-fb{margin:6px 0 0;font-size:.88rem;min-height:1em}
+.q-score{font-weight:700;color:var(--blue);margin:10px 0 0}
+
+/* explorador de matriz */
+.mexp{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.mexp-grid{display:grid;grid-template-columns:auto repeat(4,minmax(0,56px));gap:6px;justify-content:center;margin:14px 0 8px;align-items:center}
+.mexp-grid .hdr{font-size:.75rem;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+.mexp-grid button{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:9px 0;font-weight:700;font-family:"Cascadia Code",Consolas,monospace}
+.mexp-grid button.sel{border-color:var(--green);background:var(--t-green);color:var(--green)}
+.mexp-grid button.hl{border-color:var(--blue);background:var(--t-blue)}
+.mexp-res{text-align:center;font-family:"Cascadia Code",Consolas,monospace;font-size:.92rem;min-height:2.6em}
+.malias-mem{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 6px;align-items:center}
+.mrows{display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;gap:8px}
+.mrow .etq{font-size:.8rem}
+.mrow .etq::after{content:none}
+.mrow .caja{margin-top:0}
+.mrow small{color:var(--muted);font-family:"Cascadia Code",Consolas,monospace;font-size:.76rem}
+.caja span.cambio{background:var(--t-red);color:var(--red);font-weight:700}
+/* consola flotante (modelo Clase 9) */
+.lanzador{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;border:0;border-radius:30px;padding:11px 18px;background:var(--blue);color:#fff;font-weight:700;font-size:.92rem;display:inline-flex;gap:8px;align-items:center;box-shadow:0 6px 20px rgba(15,27,45,.25)}
+.lanzador:hover{filter:brightness(1.08)}
+.cajon{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;width:min(580px,calc(100vw - 36px));max-height:calc(100vh - 36px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px rgba(15,27,45,.35);padding:16px 18px;display:none}
+.cajon.abierto{display:block}
+.cajon .cab{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cajon .cab strong{font-size:1.1rem;display:flex;gap:8px;align-items:center}
+@media (max-width:600px){.cajon{right:8px;left:8px;width:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px))}}
+.btn-mini{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:7px;padding:4px 10px;font-size:.82rem}
+.btn-mini:hover{border-color:var(--blue);color:var(--blue)}
+.btn-c{border:0;border-radius:7px;padding:8px 16px;font-weight:600;font-size:.9rem;background:var(--blue);color:#fff}
+.btn-c:disabled{opacity:.55;cursor:wait}
+.btn-c.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.ed{display:grid;grid-template-columns:auto minmax(0,1fr);background:var(--code);border:1px solid #334155;border-radius:10px;overflow:hidden;font-family:"Cascadia Code","JetBrains Mono",Consolas,monospace;font-size:.85rem;line-height:1.6}
+.ed:focus-within{border-color:var(--blue)}
+.ed .gutter{padding:12px 8px 12px 12px;text-align:right;color:#64748b;user-select:none;border-right:1px solid #334155;min-width:40px;background:#172033}
+.ed .gutter span{display:block}
+.ed .gutter span.err{color:#fff;background:var(--red);border-radius:3px;padding:0 4px;margin-right:-4px}
+.ed .area{position:relative;overflow:hidden}
+.ed .capa,.ed textarea{margin:0;border:0;padding:12px 14px;font:inherit;line-height:inherit;white-space:pre;tab-size:4;letter-spacing:0;word-spacing:0}
+.ed .capa{position:absolute;inset:0;overflow:hidden;pointer-events:none;color:#e2e8f0;background:transparent}
+.ed .capa code{background:none;padding:0;font-size:inherit;display:block;color:inherit}
+.ed textarea{position:relative;display:block;width:100%;min-height:9em;resize:none;background:transparent;color:transparent;caret-color:#e2e8f0;outline:none;overflow-x:auto;overflow-y:hidden}
+.ed textarea::selection{background:rgba(59,130,246,.35);color:transparent}
+.entradas{display:grid;gap:4px;margin-top:10px}
+.entradas label{font-size:.82rem;color:var(--muted)}
+.entradas textarea{font-family:"Cascadia Code",Consolas,monospace;font-size:.84rem;border:1px solid var(--line);border-radius:7px;padding:6px 10px;background:var(--card);color:var(--ink);resize:vertical;min-height:2.4em;line-height:1.5}
+.barra-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.barra-acc .atajo{font-size:.78rem;color:var(--muted);margin-left:auto}
+.consola-salida{margin-top:10px}
+.terminal{background:#0f172a;color:#e2e8f0;border-radius:10px;font-family:"Cascadia Code",Consolas,monospace;font-size:.82rem;line-height:1.6;padding:12px 14px;white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto}
+.terminal .tenue{color:#7f93ae}
+.terminal .rojo{color:#ff8f84}
+.explica{background:var(--t-red);border-radius:0 0 10px 10px;padding:14px 14px 10px;font-size:.9rem;margin-top:-6px}
+.explica strong{color:var(--red)}
+.btn-probar{margin-top:8px}
+/* simulador hash y venn */
+.hashsim,.venn{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.hs-in{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.hs-in input{flex:1;min-width:120px;padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);font:inherit;font-family:"Cascadia Code",Consolas,monospace;font-size:.9rem}
+.hs-tabla{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0 6px}
+.hs-cas{border:2px solid var(--line);border-radius:9px;padding:6px 8px;min-height:62px;font-size:.8rem;transition:.2s}
+.hs-cas small{display:block;color:var(--muted);font-variant-numeric:tabular-nums}
+.hs-cas span{display:block;font-family:"Cascadia Code",Consolas,monospace;font-size:.78rem;overflow-wrap:anywhere}
+.hs-cas.hit{border-color:var(--green);background:var(--t-green)}
+.hs-cas.miss{border-color:var(--orange);background:var(--t-orange)}
+@media (max-width:600px){.hs-tabla{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hs-msg{font-size:.9rem;margin:4px 0 0;min-height:2.6em}
+.venn svg{width:100%;max-width:440px;display:block;margin:10px auto 0}
+.venn .rA,.venn .rB,.venn .rI{fill:var(--card);transition:fill .25s}
+.venn .on{fill:#bfdbfe}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .venn .on{fill:#1e3a8a}}
+:root[data-theme="dark"] .venn .on{fill:#1e3a8a}
+.venn .tapa{fill:var(--card)}
+.venn .borde{fill:none;stroke:var(--ink);stroke-width:2;opacity:.55}
+.venn .vt{fill:var(--muted);font-size:14px;font-weight:700}
+.venn .ve{fill:var(--ink);font-size:15px;font-family:"Cascadia Code",Consolas,monospace}
+.venn-res{text-align:center;font-family:"Cascadia Code",Consolas,monospace;font-size:.9rem;min-height:2.6em;margin-top:4px}
+/* archivos, laboratorio, flujo */
+.explorador{margin-top:8px}
+.ex-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+.ex-arch{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 9px;font-family:"Cascadia Code",Consolas,monospace;font-size:.8rem;text-align:left;min-width:0}
+.ex-arch span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ex-arch i{color:var(--orange)}
+.ex-arch small{color:var(--muted);font-size:.7rem;white-space:nowrap}
+.ex-arch em{font-style:normal;font-size:.66rem;font-weight:700;border-radius:9px;padding:0 6px;font-family:"Segoe UI",system-ui,sans-serif}
+.ex-arch .ex-nuevo{background:var(--t-green);color:var(--green)}
+.ex-arch .ex-modificado{background:var(--t-orange);color:#b45309}
+.ex-arch.on{border-color:var(--blue);background:var(--t-blue)}
+.ex-ver:empty{display:none}
+.ex-ver{margin-top:8px;border-radius:10px;overflow:hidden;background:var(--code)}
+.ex-cab{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;color:#cbd5e1;background:#172033}
+.ex-cab code{background:transparent!important;color:#93c5fd}
+.ex-cab .btn-mini{color:#cbd5e1;border-color:#334155}
+.ex-txt{margin:0;padding:10px 14px;color:#e2e8f0;font-size:.8rem;max-height:320px;overflow:auto;white-space:pre}
+.caj-arch{margin-top:12px}
+.btn-restaurar{width:100%;justify-content:center}
+.ent-nota{padding:7px 14px;font-size:.78rem;color:#94a3b8;border-top:1px solid rgba(148,163,184,.12)}
+.ent-nota code{background:transparent!important;color:#fbbf24}
+.ej-ent-lbl{display:block;padding:8px 10px;font-size:.78rem;color:#94a3b8;background:#172033}
+.ej-ent{display:block;width:100%;margin-top:4px;background:#0f172a;color:#fbbf24;border:1px solid #334155;border-radius:6px;padding:5px 8px;font-family:"Cascadia Code",Consolas,monospace;font-size:.8rem;resize:vertical}
+.lab{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.lab-in{width:100%;margin-top:10px;background:var(--code);color:#e2e8f0;border:1px solid #334155;border-radius:9px;padding:10px 12px;font-family:"Cascadia Code",Consolas,monospace;font-size:.86rem;resize:vertical}
+.lab-res{margin-top:8px;min-height:3em}
+.lab-ok{color:var(--green);font-size:.9rem}
+.lab-mal{color:var(--red);font-size:.9rem;font-family:"Cascadia Code",Consolas,monospace}
+.lab-espera{color:var(--muted);font-size:.9rem}
+.lab-py,.lab-txt{margin:6px 0 0;background:var(--t-blue);border-radius:8px;padding:8px 10px;font-size:.84rem;white-space:pre-wrap;word-break:break-word}
+.lab-txt{background:var(--t-red)}
+.lab-txt mark{background:var(--red);color:#fff;border-radius:3px;padding:0 2px}
+.flujo{display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;align-items:center;margin:8px 0 6px}
+.fl-caja{border-radius:12px;padding:16px 12px;text-align:center;border:2px solid}
+.fl-caja b{display:block}.fl-caja small{color:var(--muted)}
+.fl-py{border-color:var(--blue);background:var(--t-blue)}.fl-js{border-color:var(--green);background:var(--t-green)}
+.fl-flechas{display:flex;flex-direction:column;gap:6px}
+.fl-f{border-radius:8px;padding:5px 10px;font-size:.84rem;display:flex;justify-content:space-between;gap:8px;align-items:center;position:relative}
+.fl-f code{background:transparent!important;font-weight:700}
+.fl-f small{color:var(--muted)}
+.fl-f.der{background:var(--t-orange)}.fl-f.izq{background:var(--t-purple)}
+.fl-f.der::after{content:"→";font-weight:700;color:var(--orange)}
+.fl-f.izq::before{content:"←";font-weight:700;color:var(--purple)}
+@media (max-width:700px){.flujo{grid-template-columns:1fr}.fl-f small{display:none}}
+.fases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.fase{border-radius:10px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:3px;position:relative}
+.fase code{background:transparent!important;font-size:.78rem}
+.fase small{color:var(--muted);font-size:.78rem}
+.f1{background:var(--t-blue)}.f2{background:var(--t-orange)}.f3{background:var(--t-green)}
+@media (max-width:600px){.fases{grid-template-columns:1fr}}
+/* clase 11 */
+.ex-borrado{opacity:.6;text-decoration:line-through;cursor:default}
+.ex-arch .ex-eliminado{background:var(--t-red);color:var(--red)}
+.ex-nl{color:#64748b;font-size:.72rem;margin-left:2px}
+.ex-sinnl{display:inline-block;margin-left:8px;color:#fca5a5;font-size:.72rem;border:1px dashed #fca5a5;border-radius:6px;padding:0 5px}
+.reg-demo{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:10px 0;font-family:"Cascadia Code",Consolas,monospace;font-size:.84rem}
+.reg-fila{display:grid;grid-template-columns:90px 1fr 50px}
+.reg-fila span{padding:6px 10px;border-right:1px dashed var(--line)}
+.reg-fila span:last-child{border-right:0}
+.reg-fila+.reg-fila{border-top:1px solid var(--line)}
+.reg-cab{background:var(--t-blue);color:var(--blue);font-weight:700;font-family:"Segoe UI",system-ui,sans-serif}
+.tira{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0}
+.tira span{min-width:26px;text-align:center;border:1px solid var(--line);border-radius:5px;padding:4px 3px;font-family:"Cascadia Code",Consolas,monospace;font-size:.85rem;background:var(--card)}
+.tira span.nl{background:var(--t-orange);border-color:var(--orange);color:#b45309;font-weight:700}
+.rl{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.rl-txt{background:var(--code);color:#e2e8f0;border-radius:9px;padding:12px 14px;margin:10px 0;font-family:"Cascadia Code",Consolas,monospace;font-size:.86rem;line-height:1.8;overflow-x:auto;white-space:nowrap}
+.rl-txt .rl-leido{color:#64748b}
+.rl-txt .rl-nl{color:#fbbf24;font-size:.75rem;margin-left:1px}
+.rl-txt .rl-nl.rl-leido{color:#78716c}
+.rl-cur{color:#34d399;animation:parp 1s steps(1) infinite;margin:0 1px}
+@keyframes parp{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.rl-cur{animation:none}}
+.rl-eof{color:#fca5a5;font-size:.72rem;margin-left:8px;border:1px dashed #fca5a5;border-radius:6px;padding:0 5px}
+.rl-res{font-size:.9rem;min-height:4.5em;margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.rl-v b{color:var(--green)}.rl-f b{color:var(--red)}
+.aux-flujo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.af-paso{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);display:flex;flex-direction:column;gap:3px;position:relative}
+.af-paso span{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.8rem}
+.af-paso b{font-size:.86rem}.af-paso small{color:var(--muted);font-size:.78rem}
+.af-paso code{background:transparent!important;padding:0!important;overflow-wrap:anywhere}
+.comparar>div{min-width:0}
+.comparar code{overflow-wrap:anywhere;white-space:normal}
+@media (max-width:520px){.comparar{grid-template-columns:1fr}}
+@media (max-width:760px){.aux-flujo{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lv-ej{background:var(--code);color:#fbbf24;border-radius:8px;padding:8px 12px;font-size:.88rem;overflow-x:auto}
+/* footer */
+.pie{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line);padding:16px 0 26px;margin-top:10px}
+.pie .firma{font-weight:600;color:var(--ink)}
+@media print{aside.side,.practica,.win-bar button{display:none}.layout{grid-template-columns:1fr}details{border:0}details>div{display:block}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/brython@3.13.2/brython.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/brython@3.13.2/brython_stdlib.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside class="side" aria-label="Agenda y herramientas de la clase">
+  <div class="side-box">
+    <h4><i class="fa-regular fa-clock c-blue"></i> Reloj de la clase</h4>
+    <div class="reloj" id="reloj" aria-live="off">00:00</div>
+    <div class="barra"><span id="barra"></span></div>
+    <div class="btns"><button class="btn" id="t-play" type="button"><i class="fa-solid fa-play"></i> Iniciar</button><button class="btn-sec" id="t-reset" type="button">Reiniciar</button></div>
+  </div>
+  <div class="side-box">
+    <h4><i class="fa-solid fa-list-ol c-blue"></i> Agenda (150 min)</h4>
+    <ul class="agenda" id="agenda"></ul>
+  </div>
+  <div class="side-box">
+    <label class="modo"><span id="modo-lbl">Vista docente</span><span class="switch"><input type="checkbox" id="modo-docente" checked><span></span></span></label>
+    <p class="muted" style="margin:.5em 0 0">Apagalo para proyectar sin las notas para el docente.</p>
+    <button class="btn-sec btn-restaurar" type="button" data-restaurar style="margin-top:10px"><i class="fa-solid fa-rotate-left"></i> Restaurar archivos</button>
+    <div class="py-estado" id="py-estado"><span class="dot"></span><span>Cargando Python…</span></div>
+  </div>
+</aside>
+<main>
+<header class="hero">
+  <h1><i class="fa-solid fa-file-lines"></i> Archivos de texto en Python</h1>
+  <p>Abrir, leer, escribir y mantener datos en archivos: clase teórico-práctica</p>
+  <div class="pills" style="justify-content:center;margin-top:14px"><span class="pill"><i class="fa-solid fa-graduation-cap"></i> Programación I · Clase 11</span><span class="pill"><i class="fa-solid fa-folder-open"></i> Carpeta simulada en el navegador</span><span class="pill"><i class="fa-regular fa-clock"></i> 2 h 30 min</span></div>
+</header>
+<section id="apertura" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-door-open"></i><h2>Apertura</h2><span class="sec-sub">| Que los datos sobrevivan al programa</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 5 min</span><span class="pill"><i class="fa-solid fa-flag"></i> Encuadre</span></div></header>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-bullseye c-blue"></i> Objetivos de aprendizaje</h3><p>Al finalizar la clase, cada estudiante va a poder:</p><div class="tiles t2"><div class="tile t-blue"><div class="tile-tit"><i class="fa-solid fa-file-lines"></i> Reconocer</div><p>Qué es un archivo de texto, sus <b>registros</b>, sus <b>campos</b> y el delimitador <code>\n</code>.</p></div><div class="tile t-green"><div class="tile-tit"><i class="fa-solid fa-door-open"></i> Abrir y cerrar</div><p>Usar <code>open()</code> con el modo correcto, cerrar siempre y atrapar los errores de apertura.</p></div><div class="tile t-orange"><div class="tile-tit"><i class="fa-solid fa-pen"></i> Leer y escribir</div><p>Grabar con <code>write()</code> y <code>writelines()</code>, y leer con <code>readline()</code>, <code>for … in</code> y <code>with</code>.</p></div><div class="tile t-purple"><div class="tile-tit"><i class="fa-solid fa-database"></i> Gestionar</div><p>Hacer altas en modo <code>"a"</code> y bajas o modificaciones con un <b>archivo auxiliar</b>.</p></div></div></div><div class="card"><h3 class="card-tit"><i class="fa-solid fa-list-check c-blue"></i> Agenda de la clase (150 min)</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Bloque</th><th>Contenido</th><th>Tiempo</th></tr></thead><tbody><tr><td>Apertura</td><td>Encuadre y pregunta disparadora</td><td>5'</td></tr><tr><td>Módulo 1</td><td>Archivos, registros y campos</td><td>15'</td></tr><tr><td>Módulo 2</td><td>Apertura, rutas, cierre y excepciones</td><td>25'</td></tr><tr><td>Pausa</td><td>Recreo</td><td>10'</td></tr><tr><td>Módulo 3</td><td>Escritura, lectura y with</td><td>30'</td></tr><tr><td>Módulo 4</td><td>Formatos de registro y CRUD con archivo auxiliar</td><td>25'</td></tr><tr><td>Módulo 5</td><td>Práctica progresiva (4 niveles)</td><td>35'</td></tr><tr><td>Cierre</td><td>Repaso, tarea y material</td><td>5'</td></tr></tbody></table></div></div><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p><b>Pregunta disparadora:</b> “Su programa de notas funciona perfecto. Lo cierran, lo abren al día siguiente… ¿dónde están las notas?”. Se perdieron: las variables viven en la <b>memoria RAM</b>, que es volátil. Un archivo las guarda en un dispositivo <b>no volátil</b> (disco, pendrive, la nube).</p>
+<p>Esta página trae un <b>sistema de archivos simulado</b> con los archivos de la clase (<code>notas.txt</code>, <code>alumnos.txt</code>, <code>stock.txt</code>…). Los ejemplos con <code>open()</code> se ejecutan de verdad: lo que un programa graba, el siguiente lo lee. El botón <b>Restaurar archivos</b> vuelve todo al estado original.</p></aside></div><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-folder-open c-blue"></i> Carpeta de la clase</h3><p>Así se ve la carpeta donde “vive” el programa. Tocá un archivo para ver su contenido. Los cambios que hagan los programas se marcan como <b>nuevo</b>, <b>modificado</b> o <b>eliminado</b>.</p><div class="explorador" data-explorador></div></div><div class="win"><pre class="py" data-title="python — primer contacto" data-run="1"># Tu primer programa con archivos: leer y mostrar cada línea
+with open("alumnos.txt", "r", encoding="UTF-8") as archivo:
+    for linea in archivo:
+        print(linea.strip())     # strip() quita el salto de línea final</pre></div></div></div>
+</section>
+<section id="m1" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-file-lines"></i><h2>Módulo 1: Archivos y archivos de texto</h2><span class="sec-sub">| Registros, campos y el delimitador \n</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 15 min</span><span class="pill"><i class="fa-solid fa-book-open"></i> Teoría</span></div></header>
+<h3 class="subtema"><span class="subnum">1.1</span>¿Qué es un archivo y para qué sirve?<span class="submin">5 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-box-archive c-blue"></i> Registros y campos</h3><p>Un <b>archivo</b> es un conjunto de elementos llamados <b>registros</b>, todos del mismo tipo. Cada registro reúne varios datos sobre un mismo sujeto (una persona, un producto). Cada uno de esos datos es un <b>campo</b>.</p>
+<div class="reg-demo"><div class="reg-fila reg-cab"><span>legajo</span><span>apellido y nombre</span><span>nota</span></div><div class="reg-fila"><span>123456</span><span>Roma, Pablo Diego</span><span>10</span></div><div class="reg-fila"><span>123457</span><span>Lezama, Luisa</span><span>8</span></div></div>
+<p class="muted">En <code>notas.txt</code>, cada <b>línea</b> es un registro y cada dato separado por <code>;</code> es un campo.</p>
+<p><b>¿Por qué son útiles?</b> Para <b>persistir</b> la información en el tiempo y para <b>compartirla</b> entre usuarios y aplicaciones.</p></div><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>Abrí <code>notas.txt</code> en el explorador y pedí que identifiquen en voz alta cuántos registros y cuántos campos tiene. Conectá con la matriz de la clase de listas: un archivo de texto con separador es, en el fondo, una matriz guardada en disco.</p></aside></div><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-file c-blue"></i> Archivos de texto y binarios</h3><div class="tiles t2"><div class="tile t-blue"><div class="tile-tit"><i class="fa-solid fa-file-lines"></i> De texto</div><p>Datos guardados como <b>cadenas de caracteres</b>. Se abren con cualquier editor (Bloc de notas, VS Code). Son el tema de hoy.</p></div><div class="tile t-purple"><div class="tile-tit"><i class="fa-solid fa-file-zipper"></i> Binarios</div><p>Bytes que solo entiende un programa: imágenes, audio, ejecutables. Se abren con modo <code>"b"</code>.</p></div></div><p>Un archivo de texto plano no tiene formato (ni negrita ni colores), cada línea es un registro, su longitud es <b>variable</b> y por eso necesita un <b>delimitador</b>.</p>
+<p>Todo trabajo con archivos sigue tres pasos:</p>
+<div class="fases"><div class="fase f1"><b>1. Abrir</b><code>open()</code></div><div class="fase f2"><b>2. Manipular</b><code>write() · readline()</code></div><div class="fase f3"><b>3. Cerrar</b><code>close()</code></div></div></div></div></div>
+
+<h3 class="subtema"><span class="subnum">1.2</span>El delimitador de registro: \n<span class="submin">4 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-arrow-turn-down c-blue"></i> Lo que el archivo guarda en realidad</h3><p>Como las líneas tienen longitud variable, entre registro y registro hay un carácter especial: el <b>salto de línea</b>, que en Python se escribe <code>\n</code>. El editor lo muestra como “bajar de renglón”, pero en el archivo es un carácter más.</p>
+<div class="tira" aria-label="Lunes, salto, Martes, salto, Miércoles, salto"><span class="">L</span><span class="">u</span><span class="">n</span><span class="">e</span><span class="">s</span><span class="nl">\n</span><span class="">M</span><span class="">a</span><span class="">r</span><span class="">t</span><span class="">e</span><span class="">s</span><span class="nl">\n</span><span class="">M</span><span class="">i</span><span class="">é</span><span class="">r</span><span class="">c</span><span class="">o</span><span class="">l</span><span class="">e</span><span class="">s</span><span class="nl">\n</span></div>
+<p>Por eso, cuando leemos una línea, el <code>\n</code> viene incluido al final; y cuando escribimos, <b>tenemos que agregarlo nosotros</b>.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: la última línea sin salto</div><p>Muchos archivos, como <code>semana.txt</code> y <code>notas.txt</code> de esta clase, <b>no tienen</b> <code>\n</code> después del último registro. Si después agregás un registro en modo <code>"a"</code>, queda pegado al anterior: <code>JuevesViernes</code>. Lo resolvemos en el ejercicio B1.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — ver los \n" data-run="1"># repr() muestra los caracteres "invisibles" de cada línea
+with open("semana.txt", encoding="UTF-8") as archivo:
+    for linea in archivo:
+        print(repr(linea), "-&gt;", len(linea), "caracteres")</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">1.3</span>Formatos de registro<span class="submin">6 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-table-columns c-blue"></i> ¿Cómo se separan los campos?</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Formato</th><th>Ejemplo de línea</th><th>Cómo se lee</th></tr></thead><tbody><tr><td>Con separador <code>;</code></td><td><code>123456;Roma, Pablo Diego;10</code></td><td><code>linea.split(";")</code></td></tr><tr><td>Con tabulación <code>\t</code></td><td><code>01234567→Sofía Castro→21-09-1999</code></td><td><code>linea.split("\t")</code></td></tr><tr><td>Ancho fijo</td><td><code>123123 Juan Pablo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;12500.00</code></td><td>slicing: <code>linea[0:6]</code></td></tr><tr><td>Un campo por línea</td><td><code>123123</code> / <code>Juan Pablo</code> / <code>A</code> / <code>12500.0</code></td><td>un <code>readline()</code> por campo</td></tr><tr><td>Longitud variable</td><td><code>0612312310Juan Perez01A06100.01</code></td><td>leer 2 dígitos con el largo y cortar</td></tr></tbody></table></div><p>El más usado (y el que pide el proyecto final) es el de <b>separador</b>. Elegí un separador que no pueda aparecer dentro de los datos: en <code>notas.txt</code> el nombre lleva coma, por eso el separador es <code>;</code>.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: el separador dentro de un dato</div><p>Si el separador fuera la coma, <code>123456,Roma, Pablo Diego,10</code> tendría <b>cuatro</b> campos y <code>leg, nombre, nota = linea.split(",")</code> fallaría con <code>ValueError: too many values to unpack</code>.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — de línea a campos" data-run="1">linea = "123456;Roma, Pablo Diego;10\n"           # así llega una línea de notas.txt
+
+legajo, apenom, nota = linea.strip().split(";")  # strip() quita el \n, split() separa
+print(legajo, "|", apenom, "|", int(nota) + 1)
+
+# Con una coma como separador, el nombre se rompe en dos campos
+print("123456,Roma, Pablo Diego,10".split(","))   # 4 elementos</pre></div></div></div>
+</section>
+<section id="m2" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-door-open"></i><h2>Módulo 2: Apertura, rutas, cierre y excepciones</h2><span class="sec-sub">| Todo archivo se abre, se usa y se cierra</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 25 min</span><span class="pill"><i class="fa-solid fa-gears"></i> Teoría + práctica</span></div></header>
+<h3 class="subtema"><span class="subnum">2.1</span>Apertura con open() y modos<span class="submin">8 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-door-open c-blue"></i> <code>variable = open(file, mode="r")</code></h3><p><code>open()</code> devuelve un <b>objeto archivo</b> que guardamos en una variable. <code>file</code> es el nombre (con o sin ruta) y <code>mode</code>, el modo de apertura:</p><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Modo</th><th>Para qué</th><th>Si el archivo NO existe</th><th>Si el archivo YA existe</th></tr></thead><tbody><tr><td><code>"r"</code> (por defecto)</td><td>Leer</td><td><code>FileNotFoundError</code></td><td>Lo lee desde el principio</td></tr><tr><td><code>"w"</code></td><td>Escribir</td><td>Lo crea</td><td><b>Lo vacía</b> y escribe desde cero</td></tr><tr><td><code>"a"</code></td><td>Agregar (append)</td><td>Lo crea</td><td>Escribe <b>al final</b>, sin borrar</td></tr><tr><td><code>"x"</code></td><td>Crear</td><td>Lo crea</td><td><code>FileExistsError</code></td></tr></tbody></table></div><p>Un segundo carácter indica el tipo: <code>t</code> texto (por defecto) o <code>b</code> binario. Por eso <code>"r"</code> y <code>"rt"</code> son lo mismo, y verás <code>"wt"</code> en los ejemplos del material.</p>
+<p>Agregá siempre <code>encoding="UTF-8"</code>: así se conservan acentos y la ñ en cualquier sistema operativo.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: abrir con <code>"w"</code> un archivo con datos</div><p>El modo <code>"w"</code> borra el contenido <b>en el momento de abrir</b>, aunque después no escribas nada. Para agregar registros sin perder los anteriores se usa <code>"a"</code>.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — modos de apertura" data-run="1"># "a" agrega al final; "w" empieza de cero
+with open("prueba.txt", "w", encoding="UTF-8") as f:
+    f.write("primera\n")
+with open("prueba.txt", "a", encoding="UTF-8") as f:
+    f.write("segunda\n")
+for linea in open("prueba.txt", encoding="UTF-8"):
+    print("a -&gt;", linea.strip())
+
+with open("prueba.txt", "w", encoding="UTF-8") as f:
+    pass                                # se abre con "w" y no se escribe nada
+print("tras abrir con w:", repr(open("prueba.txt", encoding="UTF-8").readline()))
+
+open("no_existe.txt", "r")              # FileNotFoundError</pre></div><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>Mirá el explorador de la apertura después de ejecutar este bloque: aparece <code>prueba.txt</code> como <b>nuevo</b>. Preguntá antes de ejecutar: “¿qué imprime la última línea antes del error?”. La respuesta (<code>''</code>) fija la idea de que <code>"w"</code> vacía el archivo.</p></aside></div></div>
+
+<h3 class="subtema"><span class="subnum">2.2</span>Rutas y la trampa de la barra invertida<span class="submin">5 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-route c-blue"></i> ¿Dónde busca Python el archivo?</h3><p>Si no ponés ruta, Python busca el archivo en la <b>misma carpeta del programa</b>. Si ponés una ruta de Windows, cuidado: la barra invertida <code>\</code> inicia secuencias de escape. En <code>"c:\nuevo\datos.txt"</code> el <code>\n</code> se convierte en un <b>salto de línea</b> y la ruta queda inválida.</p><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Solución</th><th>Ejemplo</th></tr></thead><tbody><tr><td>Doble barra invertida</td><td><code>"c:\\nuevo\\datos.txt"</code></td></tr><tr><td>Barra normal</td><td><code>"c:/nuevo/datos.txt"</code></td></tr><tr><td>Cadena cruda (raw)</td><td><code>r"c:\nuevo\datos.txt"</code></td></tr></tbody></table></div><p>La materia recomienda <b>no pedirle al usuario el nombre del archivo</b>: es una decisión del programador.</p></div></div><div class="col"><div class="win"><pre class="py" data-title="python — rutas" data-run="1">ruta_mal = "c:\nuevo\datos.txt"
+ruta_doble = "c:\\nuevo\\datos.txt"
+ruta_barra = "c:/nuevo/datos.txt"
+ruta_cruda = r"c:\nuevo\datos.txt"
+
+print(repr(ruta_mal))          # tiene un \n real adentro
+print(ruta_mal)                # se "rompe" en dos renglones
+print(ruta_doble == ruta_cruda)   # True: las dos son la misma ruta
+print(ruta_barra)
+
+open(ruta_mal, "wt")           # OSError: Invalid argument (en Windows)</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">2.3</span>Cierre seguro: try / except / finally<span class="submin">6 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-lock c-blue"></i> Todo archivo se debe cerrar</h3><p>Al cerrar con <code>close()</code> se graban los cambios pendientes y se libera el archivo para otros programas. Por eso el cierre suele ir en el <code>finally</code>, que se ejecuta pase lo que pase.</p>
+<p>Pero si <code>open()</code> falló, la variable nunca se creó y <code>arch.close()</code> lanza <code>NameError</code>. Por eso el material protege el cierre con un segundo <code>try</code>.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: cerrar dentro del <code>try</code></div><p>Si el <code>close()</code> está al final del <code>try</code> y ocurre un error en el medio, el archivo <b>queda abierto</b>. En un programa que escribe, se pueden perder los datos que todavía no se grabaron en el disco.</p></aside><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>Este patrón es largo a propósito: muestra todo lo que hay que cuidar. En el Módulo 3 aparece <code>with</code>, que hace lo mismo en una línea. Conviene que primero entiendan el problema que <code>with</code> resuelve.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — A01_abrirArchivo (adaptado)" data-run="1">def abrirArchivo(arch):
+    try:
+        contenido = open(arch, "r", encoding="UTF-8")
+        for linea in contenido:
+            print(linea.strip())
+    except FileNotFoundError:
+        print("Error, el archivo no existe")
+    except OSError:                  # incluye IOError y otros problemas del sistema
+        print("Error, no se pudo abrir el archivo")
+    finally:
+        try:
+            contenido.close()        # siempre debe cerrarse
+            print("[archivo cerrado]")
+        except NameError:            # open() falló: no hay nada que cerrar
+            print("[no había nada que cerrar]")
+
+abrirArchivo("semana.txt")
+abrirArchivo("feriados.txt")</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">2.4</span>Excepciones al trabajar con archivos<span class="submin">6 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-triangle-exclamation c-blue"></i> Del error más específico al más general</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Excepción</th><th>Cuándo aparece</th></tr></thead><tbody><tr><td><code>FileNotFoundError</code></td><td>El archivo (o la carpeta) no existe al leer.</td></tr><tr><td><code>IsADirectoryError</code></td><td>La ruta es una carpeta, no un archivo.</td></tr><tr><td><code>PermissionError</code></td><td>Sin permisos: archivo de solo lectura, en uso, protegido.</td></tr><tr><td><code>UnsupportedOperation</code></td><td>Operación incompatible con el modo: leer un archivo abierto con <code>"w"</code>.</td></tr><tr><td><code>ValueError</code></td><td>Modo inválido o usar un archivo ya cerrado.</td></tr><tr><td><code>TypeError</code></td><td>Escribir algo que no es cadena: <code>arch.write(5)</code>.</td></tr><tr><td><code>OSError</code></td><td>La clase general: disco lleno, ruta inválida, etc. Va <b>al final</b>.</td></tr></tbody></table></div><p><code>FileNotFoundError</code>, <code>IsADirectoryError</code> y <code>PermissionError</code> son “hijas” de <code>OSError</code>: si <code>except OSError</code> va primero, las atrapa a todas y nunca llegás al mensaje específico.</p></div></div><div class="col"><div class="win"><pre class="py" data-title="python — catálogo de errores" data-run="1">import io
+
+pruebas = [
+    ("feriados.txt", "r"),        # no existe
+    ("respaldo", "r"),            # es una carpeta
+    ("solo_lectura.txt", "w"),    # archivo protegido
+    ("notas.txt", "q"),           # modo inválido
+]
+for nombre, modo in pruebas:
+    try:
+        arch = open(nombre, modo, encoding="UTF-8")
+        arch.close()
+    except FileNotFoundError:
+        print(f"{nombre:&lt;18} -&gt; FileNotFoundError")
+    except IsADirectoryError:
+        print(f"{nombre:&lt;18} -&gt; IsADirectoryError")
+    except PermissionError:
+        print(f"{nombre:&lt;18} -&gt; PermissionError")
+    except ValueError as e:
+        print(f"{nombre:&lt;18} -&gt; ValueError: {e}")
+
+with open("prueba2.txt", "w", encoding="UTF-8") as arch:
+    try:
+        arch.readline()               # se abrió para escribir
+    except io.UnsupportedOperation as e:
+        print("UnsupportedOperation:", e)
+    try:
+        arch.write(5)                 # write() solo acepta str
+    except TypeError as e:
+        print("TypeError:", e)</pre></div></div></div>
+</section>
+<section id="pausa" class="seccion pausa"><div class="pausa-in"><i class="fa-solid fa-mug-hot"></i><div><h2>Pausa: 10 minutos</h2><p>Volvemos con escritura y lectura: los métodos que vamos a usar todo el cuatrimestre.</p></div></div></section>
+<section id="m3" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-pen-to-square"></i><h2>Módulo 3: Escritura, lectura y with</h2><span class="sec-sub">| write, writelines, readline, for … in</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 30 min</span><span class="pill"><i class="fa-solid fa-gears"></i> Teoría + práctica</span></div></header>
+<h3 class="subtema"><span class="subnum">3.1</span>Escritura: write() y writelines()<span class="submin">8 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-pen c-blue"></i> Grabar en el archivo</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Método</th><th>Qué graba</th><th>Salto de línea</th></tr></thead><tbody><tr><td><code>arch.write(cadena)</code></td><td>Una cadena</td><td>Lo agregás vos: <code>+ "\n"</code></td></tr><tr><td><code>arch.writelines(lista)</code></td><td>Una lista de cadenas, una tras otra</td><td>Lo agregás vos <b>a cada elemento</b></td></tr><tr><td><code>print(..., file=arch)</code></td><td>Lo mismo que mostraría por pantalla</td><td>Lo agrega <code>print</code></td></tr></tbody></table></div><p><code>write()</code> solo acepta <b>cadenas</b>: los números hay que convertirlos con <code>str()</code> o meterlos en un f-string.</p><p>Este bloque reproduce <code>A02_escribirArchivo_I.py</code>. Las <b>datos de entrada</b> simulan lo que escribe el usuario; la última es un Enter vacío, que corta la carga. Graba en <code>alumnos_nuevos.txt</code> para no pisar <code>alumnos.txt</code>.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: olvidar el <code>\n</code></div><p><code>arch.write(legajo + ";" + nombre)</code> sin <code>"\n"</code> deja todos los registros en <b>una sola línea</b>: <code>123456;Roma234567;Lezama…</code>. Al leerlo, el <code>split(";")</code> devuelve cualquier cosa.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — A02_escribirArchivo_I" data-run="1" data-ent="123456
+Roma, Pablo Diego
+234567
+Lezama, Luisa
+345678
+Fernández, Germán
+">def ingresar_datos(archivo):
+    try:
+        arch = open(archivo, "w", encoding="UTF-8")
+        legajo = input("Legajo (enter para terminar): ")
+        while legajo != "":
+            nombre = input("Nombre: ")
+            arch.write(legajo + ';' + nombre + '\n')   # el \n lo agregamos nosotros
+            legajo = input("Legajo (enter para terminar): ")
+        print("Archivo creado correctamente.")
+    except OSError as mensaje:
+        print("No se puede grabar el archivo:", mensaje)
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            pass
+
+# Programa principal
+ingresar_datos("alumnos_nuevos.txt")</pre></div><div class="win"><pre class="py" data-title="python — A03_escribirArchivo_II (writelines)" data-run="1">def cargar_matriz_en_archivo(matriz, archivo):
+    try:
+        # Convertimos cada fila a string con punto y coma y salto de línea
+        lineas = [f"{codigo};{descripcion};{precio}\n" for codigo, descripcion, precio in matriz]
+        arch = open(archivo, "wt", encoding="UTF-8")
+        arch.writelines(lineas)
+    except OSError as mensaje:
+        print("No se puede grabar el archivo:", mensaje)
+    finally:
+        try:
+            arch.close()
+            print(f'Archivo {archivo} creado con éxito')
+        except NameError:
+            pass
+
+# Programa principal
+productos = [["A001", "Gaseosa 500ml", 1350], ["A002", "Alfajor triple", 800],
+             ["A003", "Papas fritas 50g", 850], ["A004", "Agua mineral 500ml", 700],
+             ["A005", "Caramelos surtidos (x10)", 500]]
+cargar_matriz_en_archivo(productos, 'productos.txt')</pre></div><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>A03 genera exactamente el <code>productos.txt</code> de la clase, así que en el explorador no cambia nada. Pedí que cambien un precio en la matriz y vuelvan a ejecutar: ahora aparece como <b>modificado</b>, y todo el archivo se reescribió porque el modo es <code>"wt"</code>.</p></aside></div></div>
+
+<h3 class="subtema"><span class="subnum">3.2</span>Métodos de lectura y el simulador de readline()<span class="submin">10 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-book-open-reader c-blue"></i> ¿Qué métodos usamos en la materia?</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Método</th><th>Qué devuelve</th><th>En la materia</th></tr></thead><tbody><tr><td><code>arch.read()</code></td><td>Todo el archivo en una cadena</td><td><span class="none">No aceptado</span>: peligroso con archivos grandes</td></tr><tr><td><code>arch.read(n)</code></td><td><code>n</code> caracteres</td><td><span class="none">No aceptado</span></td></tr><tr><td><code>arch.readlines()</code></td><td>Una lista con todas las líneas</td><td><span class="none">No aceptado</span>: carga todo en memoria</td></tr><tr><td><code>arch.readline()</code></td><td><b>Una</b> línea, o <code>""</code> al final</td><td><span class="val">Aceptado</span></td></tr><tr><td><code>for linea in arch</code></td><td>Una línea por vuelta</td><td><span class="val">Aceptado</span></td></tr></tbody></table></div><p>La regla tiene una razón: un archivo puede tener <b>millones</b> de registros. Con <code>readline()</code> o <code>for … in</code> hay una sola línea en memoria por vez, sin importar el tamaño del archivo.</p>
+<p>El patrón de <code>readline()</code> tiene tres partes: una <b>lectura antes</b> del <code>while</code>, la <b>condición</b> <code>while linea:</code> (una cadena vacía es falsa) y una <b>lectura al final</b> del bloque.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: olvidar la lectura al final del <code>while</code></div><p>Sin el último <code>linea = arch.readline()</code>, la variable nunca cambia y el bucle es <b>infinito</b>: procesa la primera línea para siempre. En la consola de esta página vas a ver el aviso <i>Ejecución detenida</i>.</p></aside><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: <code>strip()</code> antes de la condición y las líneas vacías</div><p>En A04 se hace <code>arch.readline().strip()</code>. Si el archivo tiene una <b>línea en blanco en el medio</b>, <code>strip()</code> la convierte en <code>""</code> y el <code>while</code> termina antes de tiempo, sin leer el resto. Hacer el <code>strip()</code> adentro del bucle (como en A06) evita el problema.</p></aside></div><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-play c-blue"></i> Simulador: ¿qué devuelve cada readline()?</h3><p>Elegí un archivo y tocá <b>readline()</b> varias veces. El cursor muestra dónde está parado Python; cuando llega al final, devuelve una cadena vacía y el <code>while</code> termina.</p>
+<div class="rl" id="rl">
+  <div class="alias-ctrl"><button class="chip-btn on" type="button" data-rl="semana.txt">semana.txt</button><button class="chip-btn" type="button" data-rl="alumnos.txt">alumnos.txt</button><button class="chip-btn" type="button" data-rl="notas.txt">notas.txt</button></div>
+  <div class="rl-txt" aria-label="Contenido del archivo con la posición del cursor"></div>
+  <div class="alias-ctrl"><button class="chip-btn accion" type="button" data-rl-acc="leer"><code>linea = arch.readline()</code></button><button class="chip-btn" type="button" data-rl-acc="strip">con <code>.strip()</code>: <b>no</b></button><button class="chip-btn" type="button" data-rl-acc="reset">Reiniciar</button></div>
+  <div class="rl-res" aria-live="polite"></div>
+</div></div><div class="win"><pre class="py" data-title="python — A04_leerArchivo (aprobados)" data-run="1">def leerArchivo(archivo, modo):
+    try:
+        arch = open(archivo, modo, encoding="UTF-8")
+        linea = arch.readline().strip()               # 1) primera lectura ANTES del while
+        print(f'{"Legajo":10}{"Apellido y nombre":20}{"Nota":4}')   # Encabezados
+        while linea:                                  # 2) mientras no sea cadena vacía
+            leg, apenom, nota = linea.split(";")
+            if int(nota) &gt;= 7:
+                print(f'{leg:10}{apenom:20}{nota:&gt;4}')
+            linea = arch.readline().strip()           # 3) leemos la línea siguiente
+    except OSError:
+        print("No se pudo leer el archivo")
+    finally:
+        try:
+            arch.close()
+        except:
+            print("No se pudo cerrar el archivo")
+
+# Programa principal
+leerArchivo("notas.txt", "r")</pre></div><div class="win"><pre class="py" data-title="python — A05_leerArchivoTab (adaptado)" data-run="1">def mostrarCumpleanios(archivo, modo, mes, anioActual):
+    try:
+        arch = open(archivo, modo, encoding="UTF-8")
+        print(f'{"DNI":&lt;12}{"Nombre y apellido":&lt;25}{"Fecha Nac.":&lt;12}{"Cumple":&lt;6}')
+        linea = arch.readline().strip()
+        while linea:
+            try:
+                dni, nombre_apellido, fecha_nac = linea.split("\t")   # separador: tabulación
+                dia, mes_nac, anio = fecha_nac.split("-")
+                aniosCumple = anioActual - int(anio)
+                if mes == mes_nac:          # comparamos el mes como texto: "09"
+                    print(f'{dni:&lt;12}{nombre_apellido:&lt;25}{fecha_nac:&lt;12}{aniosCumple:&gt;6}')
+            except ValueError:
+                print("Línea con formato incorrecto:", linea)
+            linea = arch.readline().strip()
+    except OSError:
+        print("No se pudo abrir el archivo.")
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            print("No se puede cerrar el archivo")
+
+# Programa principal
+mostrarCumpleanios("cumpleanios.txt", "r", "09", 2025)</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">3.3</span>for … in frente a readline()<span class="submin">6 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-code-compare c-blue"></i> Mismo resultado, enfoques distintos</h3><div class="tabla-wrap"><table class="tabla"><thead><tr><th></th><th><code>for linea in arch</code></th><th><code>while linea:</code> + <code>readline()</code></th></tr></thead><tbody><tr><td>Recorrido</td><td>Implícito: Python lee por vos</td><td>Explícito: vos decidís cuándo leer</td></tr><tr><td>Condición de fin</td><td>No hace falta</td><td>Obligatoria</td></tr><tr><td>Código</td><td>Más corto y legible</td><td>Más largo</td></tr><tr><td>Usalo para</td><td>Listados y lecturas normales</td><td>Lecturas intercaladas o saltos condicionales (corte de control, un campo por línea)</td></tr></tbody></table></div></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: imprimir sin <code>strip()</code></div><p><code>print(linea)</code> muestra las líneas separadas por un <b>renglón en blanco</b>: la línea trae su propio <code>\n</code> y <code>print</code> agrega otro. Es exactamente lo que le pasa a <code>A01_abrirArchivo.py</code> del material. Probalo en la consola sacando el <code>strip()</code>.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — A06_iterarArchivos (adaptado)" data-run="1">def leerArchivoForIn(archivo):
+    try:
+        arch = open(archivo, "r", encoding="UTF-8")
+        print(f'{"Código":8}{"Descripción":20}{"Cantidad":4}')
+        for linea in arch:                       # Python llama a readline() por nosotros
+            cod, desc, cant = linea.strip().split(";")
+            print(f'{cod:8}{desc:20}{cant:4}')
+    except OSError:
+        print("No se pudo leer el archivo")
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            print("No se pudo cerrar el archivo")
+
+def leerArchivoReadline(archivo):
+    try:
+        arch = open(archivo, "r", encoding="UTF-8")
+        linea = arch.readline()
+        print(f'{"Código":8}{"Descripción":20}{"Cantidad":4}')
+        while linea:                             # condición de fin explícita
+            cod, desc, cant = linea.strip().split(";")
+            print(f'{cod:8}{desc:20}{cant:4}')
+            linea = arch.readline()              # leemos la línea siguiente
+    except OSError:
+        print("No se pudo leer el archivo")
+    finally:
+        try:
+            arch.close()
+        except NameError:
+            print("No se pudo cerrar el archivo")
+
+# Programa principal
+print("Recorrido con for...in:")
+leerArchivoForIn("stock.txt")
+print("\nRecorrido con readline():")
+leerArchivoReadline("stock.txt")</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">3.4</span>La sentencia with<span class="submin">6 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-wand-magic-sparkles c-blue"></i> Abrir, usar y cerrar solo</h3><p><code>with open(...) as file:</code> abre el archivo y lo <b>cierra automáticamente</b> al salir del bloque, incluso si ocurre un error. Reemplaza todo el <code>finally</code> con el doble <code>try</code>.</p>
+<div class="comparar"><div class="mal"><span>Sin with</span><code>arch = open(...)</code><code>try: ...</code><code>finally:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;try: arch.close()</code><code>&nbsp;&nbsp;&nbsp;&nbsp;except NameError: pass</code></div><div class="bien"><span>Con with</span><code>with open(...) as arch:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;...</code><small>se cierra al terminar el bloque</small></div></div>
+<p><code>with</code> <b>no reemplaza</b> al <code>try</code>: si el archivo no existe, <code>open()</code> sigue lanzando la excepción. Por eso A08 envuelve el <code>with</code> en un <code>try</code>.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: usar el archivo fuera del bloque</div><p>Después del <code>with</code> el archivo ya está cerrado. Un <code>file.readline()</code> fuera de la sangría lanza <code>ValueError: I/O operation on closed file</code>.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — A07_usoWith (lectura y append)" data-run="1" data-ent="321654
+Pérez, Juan"># Utilizando for in
+with open("alumnos.txt", "r", encoding="UTF-8") as file:   # file: nombre del archivo abierto
+    for linea in file:
+        print(linea.strip())
+print()
+
+# Para agregar al final del archivo lo abrimos en modo append
+with open("alumnos.txt", "a", encoding="UTF-8") as file:
+    legajo = input("Ingrese legajo: ")
+    apenom = input("Ingrese apellido y nombre: ")
+    file.write(f'{legajo};{apenom}\n')
+print("¿Está cerrado?", file.closed)                       # with ya lo cerró</pre></div><div class="win"><pre class="py" data-title="python — A08_usoWith (con try)" data-run="1">def abrirArchivoWith(archivo, modo):
+    try:
+        with open(archivo, modo, encoding="UTF-8") as file:
+            linea = file.readline()
+            print(f'{"Legajo":10}{"Apellido y nombre":25}{"Nota":4}')
+            while linea:
+                legajo, nombre, nota = linea.strip().split(";")
+                print(f'{legajo:10}{nombre:25}{nota:&gt;4}')
+                linea = file.readline()
+    except OSError:
+        print("No se pudo abrir el archivo.")
+
+# Programa principal
+abrirArchivoWith("notas.txt", "r")</pre></div></div></div>
+</section>
+<section id="m4" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-database"></i><h2>Módulo 4: Formatos de registro y CRUD</h2><span class="sec-sub">| Un campo por línea, ancho fijo y archivo auxiliar</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 25 min</span><span class="pill"><i class="fa-solid fa-gears"></i> Teoría + práctica</span></div></header>
+<h3 class="subtema"><span class="subnum">4.1</span>Otros formatos: un campo por línea y ancho fijo<span class="submin">8 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-bars c-blue"></i> Un campo por línea</h3><p>Cada empleado ocupa <b>cuatro líneas</b>: legajo, nombre, categoría y sueldo. Para leerlo hacen falta cuatro <code>readline()</code> por registro: un caso donde <code>for … in</code> no alcanza y conviene el control explícito.</p></div><div class="card"><h3 class="card-tit"><i class="fa-solid fa-ruler-horizontal c-blue"></i> Ancho fijo (encolumnado)</h3><p>Cada campo ocupa siempre la misma cantidad de columnas, completando con espacios. Se graba con f-strings de ancho fijo (<code>:06d</code>, <code>:&lt;30</code>) y se lee con <b>slicing</b>: <code>linea[7:37]</code>.</p><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Índices</th><th>Campo</th><th>Formato al grabar</th><th>Slicing al leer</th></tr></thead><tbody><tr><td>0 a 5</td><td>Legajo</td><td><code>{legajo:06d}</code></td><td><code>linea[0:6]</code></td></tr><tr><td>7 a 36</td><td>Nombre</td><td><code>{nombre:&lt;30}</code></td><td><code>linea[7:37].rstrip()</code></td></tr><tr><td>38</td><td>Categoría</td><td><code>{cat}</code></td><td><code>linea[38:39]</code></td></tr><tr><td>40 a 55</td><td>Sueldo</td><td><code>{sueldo:16.2f}</code></td><td><code>float(linea[40:56])</code></td></tr></tbody></table></div><p>Los índices empiezan en 0, como en cualquier cadena. Las posiciones 6, 37 y 39 son los espacios que separan los campos. En el slicing, el fin no se incluye.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: un nombre más largo que su columna</div><p><code>f"{nombre:&lt;30}"</code> <b>no recorta</b>: un nombre de 35 letras ocupa 35 columnas y corre todos los campos siguientes. Al leer con slicing, la categoría y el sueldo salen mal sin ningún error. Recortá al grabar: <code>nombre[:30]</code>.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — Ejemplo I: grabar un campo por línea" data-run="1" data-ent="Juan Pablo
+123123
+A
+12500
+Luis Fernando
+100000
+b
+13200
+">def grabarUnoPorLinea(archivo, modo):
+    """Graba empleados con cada campo en una línea distinta."""
+    try:
+        arch = open(archivo, modo, encoding="UTF-8")
+    except OSError:
+        print("No se pudo grabar el archivo", archivo)
+    else:                                   # solo si open() salió bien
+        try:
+            nombre = input("Nombre: ")
+            while nombre != "":
+                legajo = int(input("Legajo: "))
+                cat = input("Categoría: ")
+                while len(cat) != 1:
+                    cat = input("Categoría: ")
+                sueldo = float(input("Sueldo: "))
+                empleado = [str(legajo), nombre, cat.upper(), str(sueldo)]
+                arch.write("\n".join(empleado) + "\n")   # 4 líneas por empleado
+                nombre = input("Nombre: ")
+        finally:
+            arch.close()
+
+grabarUnoPorLinea("nominaUnoPorLinea.txt", "w")</pre></div><div class="win"><pre class="py" data-title="python — Ejemplo II: leer un campo por línea" data-run="1">def cargarUnoPorLinea(archivo, modo):
+    """Muestra empleados guardados con un campo por línea."""
+    try:
+        arch = open(archivo, modo, encoding="UTF-8")
+    except OSError:
+        print("No se pudo leer el archivo")
+    else:
+        try:
+            print(f'{"Legajo":6} {"Nombre":&lt;30} {"Cat":3} {"Sueldo":&gt;14}')
+            linea = arch.readline()
+            while linea != "":
+                legajo = int(linea)                      # 1er campo: ya está en linea
+                nombre = arch.readline().rstrip()        # 2do campo: otra lectura
+                categoria = arch.readline().rstrip()     # 3er campo
+                sueldo = float(arch.readline())          # 4to campo
+                print(f"{legajo:06d} {nombre:&lt;30} {categoria:3} {sueldo:14.2f}")
+                linea = arch.readline()                  # legajo del siguiente
+        finally:
+            arch.close()
+
+cargarUnoPorLinea("nominaUnoPorLinea.txt", "r")</pre></div><div class="win"><pre class="py" data-title="python — Ejemplo IV: grabar en columnas" data-run="1" data-ent="Juan Pablo
+123123
+A
+12500
+Luis Fernando
+100000
+b
+13200
+">def grabarEnColumnas(archivo, modo):
+    """
+    Campos encolumnados (ancho fijo):
+    Desde  Hasta  Tipo      Descripción
+      1      6    entero    Legajo
+      7     37    cadena    Nombre
+     38     38    caracter  Categoría
+     40     55    real      Sueldo
+    """
+    try:
+        with open(archivo, modo, encoding="UTF-8") as arch:
+            nombre = input("Nombre: ")
+            while nombre != "":
+                legajo = int(input("Legajo: "))
+                cat = input("Categoría: ")
+                sueldo = float(input("Sueldo: "))
+                linea = f"{legajo:06d} {nombre:&lt;30} {cat.upper()} {sueldo:16.2f}"
+                arch.write(linea + "\n")
+                nombre = input("Nombre: ")
+    except OSError:
+        print("No se pudo grabar el archivo", archivo)
+
+grabarEnColumnas("nominaEnColumnas.txt", "w")
+for linea in open("nominaEnColumnas.txt", encoding="UTF-8"):
+    print(repr(linea))</pre></div><div class="win"><pre class="py" data-title="python — Ejemplo V: leer en columnas" data-run="1">def cargarEnColumnas(archivo, modo):
+    try:
+        with open(archivo, modo, encoding="UTF-8") as arch:
+            print("Listado de empleados:")
+            linea = arch.readline()
+            while linea != "":
+                legajo = int(linea[0:6])              # columnas 1 a 6
+                nombre = linea[7:37].rstrip()         # 7 a 37, sin los espacios de relleno
+                categoria = linea[38:39]              # 39
+                sueldo = float(linea[40:56])          # 41 a 56
+                print(f"{legajo:06d} {nombre:&lt;30} {categoria} {sueldo:14.2f}")
+                linea = arch.readline()
+    except OSError:
+        print("No se pudo leer el archivo", archivo)
+
+cargarEnColumnas("nominaEnColumnas.txt", "r")</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">4.2</span>CRUD con archivos de texto<span class="submin">12 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-arrows-spin c-blue"></i> Alta en append; baja y modificación con auxiliar</h3><p>En un archivo de texto no se puede borrar ni cambiar una línea “en el lugar”. Por eso cada operación tiene su técnica:</p><div class="tabla-wrap"><table class="tabla"><thead><tr><th>Operación</th><th>Técnica</th></tr></thead><tbody><tr><td><b>C</b>reate (alta)</td><td>Abrir en <code>"a"</code> y escribir el registro nuevo al final.</td></tr><tr><td><b>R</b>ead (listado)</td><td>Recorrer con <code>for … in</code> o <code>readline()</code>.</td></tr><tr><td><b>U</b>pdate (modificación)</td><td>Copiar todo a un <b>auxiliar</b>, cambiando el registro buscado.</td></tr><tr><td><b>D</b>elete (baja física)</td><td>Copiar todo al auxiliar <b>excepto</b> el registro a borrar.</td></tr></tbody></table></div><div class="aux-flujo">
+  <div class="af-paso"><span>1</span><b>Leer el original y escribir el auxiliar</b><small>registro por registro, aplicando el cambio</small></div>
+  <div class="af-paso"><span>2</span><b>Cerrar los dos</b><small>al salir del <code>with</code></small></div>
+  <div class="af-paso"><span>3</span><b><code>os.remove(original)</code></b><small>borrar el archivo viejo</small></div>
+  <div class="af-paso"><span>4</span><b><code>os.rename("auxiliar.txt", original)</code></b><small>el auxiliar toma su nombre</small></div>
+</div>
+<p>Así nunca se carga todo el archivo en memoria: funciona igual con 5 registros que con 5 millones.</p></div><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: renombrar antes de borrar</div><p>En Windows, <code>os.rename()</code> falla con <code>FileExistsError</code> si el destino ya existe (en Linux y macOS lo reemplaza sin avisar). Por eso primero <code>os.remove(original)</code> y después <code>os.rename()</code>. La alternativa portable es <code>os.replace("auxiliar.txt", original)</code>, que hace las dos cosas.</p></aside><aside class="alerta"><div class="alerta-tit"><i class="fa-solid fa-triangle-exclamation"></i> Alerta de error típico: borrar o renombrar con el archivo abierto</div><p>Si llamás a <code>os.remove()</code> <b>dentro</b> del <code>with</code>, el archivo todavía está abierto y Windows responde <code>PermissionError: el proceso no tiene acceso al archivo porque está siendo utilizado</code>. Primero se sale del <code>with</code> (se cierran los archivos) y después se borra y renombra.</p></aside><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>Ejecutá los tres bloques en orden (alta, baja, modificación) con el explorador de la apertura abierto: vas a ver aparecer y desaparecer <code>auxiliar.txt</code>. Es la técnica que pide la tarea del proyecto final. El material menciona una carpeta <code>CRUD_archivos</code>; estos bloques son una versión propia de esta guía con la misma idea.</p></aside></div><div class="col"><div class="win"><pre class="py" data-title="python — alta (append con código autoincremental)" data-run="1">def alta_producto(archivo, descripcion, precio):
+    """Agrega un producto al final, con código autoincremental (A001, A002...)."""
+    ultimo = 0
+    try:
+        with open(archivo, "r", encoding="UTF-8") as arch:    # 1) buscar el último código
+            for linea in arch:
+                linea = linea.strip()
+                if linea:
+                    codigo = linea.split(";")[0]               # "A005"
+                    ultimo = max(ultimo, int(codigo[1:]))      # 5
+    except FileNotFoundError:
+        pass                                                   # sin archivo: arranca en A001
+    nuevo = f"A{ultimo + 1:03d}"
+    try:
+        with open(archivo, "a", encoding="UTF-8") as arch:    # 2) agregar al final
+            arch.write(f"{nuevo};{descripcion};{precio}\n")
+        print("Alta:", nuevo, descripcion)
+    except OSError as e:
+        print("No se pudo grabar:", e)
+
+alta_producto("productos.txt", "Chicle de menta", 300)
+alta_producto("productos.txt", "Turrón de maní", 450)</pre></div><div class="win"><pre class="py" data-title="python — baja física con archivo auxiliar" data-run="1">import os
+
+def baja_producto(archivo, codigo_baja):
+    """Baja física: copia todos los registros MENOS uno a un archivo auxiliar."""
+    encontrado = False
+    try:
+        with open(archivo, "r", encoding="UTF-8") as original, \
+             open("auxiliar.txt", "w", encoding="UTF-8") as aux:
+            for linea in original:
+                codigo = linea.split(";")[0]
+                if codigo == codigo_baja:
+                    encontrado = True              # este registro NO se copia
+                else:
+                    aux.write(linea)               # la línea ya trae su \n
+    except OSError as e:
+        print("Error al procesar:", e)
+        return
+    if encontrado:
+        os.remove(archivo)                         # 1) borrar el original
+        os.rename("auxiliar.txt", archivo)         # 2) el auxiliar pasa a ser el original
+        print("Baja realizada:", codigo_baja)
+    else:
+        os.remove("auxiliar.txt")                  # nada cambió: descartar el auxiliar
+        print("No existe el código", codigo_baja)
+
+baja_producto("productos.txt", "A002")
+baja_producto("productos.txt", "Z999")</pre></div><div class="win"><pre class="py" data-title="python — modificación con archivo auxiliar" data-run="1">import os
+
+def modificar_precio(archivo, codigo_buscado, nuevo_precio):
+    """Modificación: copia todo al auxiliar, cambiando solo el registro buscado."""
+    modificado = False
+    try:
+        with open(archivo, "r", encoding="UTF-8") as original, \
+             open("auxiliar.txt", "w", encoding="UTF-8") as aux:
+            for linea in original:
+                codigo, descripcion, precio = linea.strip().split(";")
+                if codigo == codigo_buscado:
+                    precio = nuevo_precio
+                    modificado = True
+                aux.write(f"{codigo};{descripcion};{precio}\n")
+        os.remove(archivo)
+        os.rename("auxiliar.txt", archivo)
+    except (OSError, ValueError) as e:
+        print("Error al modificar:", e)
+        return
+    print("Modificado" if modificado else "No encontrado", codigo_buscado)
+
+modificar_precio("productos.txt", "A004", 750)
+for linea in open("productos.txt", encoding="UTF-8"):
+    print(linea.strip())</pre></div></div></div>
+
+<h3 class="subtema"><span class="subnum">4.3</span>Recomendaciones de la materia<span class="submin">5 min</span></h3>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-clipboard-check c-blue"></i> Buenas prácticas con archivos</h3><ul class="lista-ok">
+<li><b>No cargar todo el archivo en memoria</b>: la ventaja de un archivo es justamente procesarlo de a un registro.</li>
+<li><b>No abrir y cerrar el archivo por cada registro</b>: los tiempos se disparan. Se abre, se procesa y se cierra.</li>
+<li><b>Minimizar los recorridos</b>: si con una pasada alcanza, no se lee dos veces.</li>
+<li>En modo <code>"r"</code> el archivo tiene que existir; <code>"w"</code> y <code>"a"</code> lo crean.</li>
+<li><b>No pedirle al usuario el nombre del archivo</b>: lo decide el programador.</li>
+<li>Capturar <code>FileNotFoundError</code> <b>antes</b> que <code>OSError</code>.</li></ul></div></div><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-gauge-high c-blue"></i> ¿Por qué importa abrir una sola vez?</h3><p>Cada <code>open()</code> le pide al sistema operativo que busque el archivo, verifique permisos y prepare el acceso. Hacerlo una vez por registro multiplica ese costo por la cantidad de registros.</p>
+<div class="comparar"><div class="mal"><span>Abre una vez por registro</span><code>for dato in datos:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;with open(r, "a") as f:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f.write(dato)</code><small>1.000 registros = 1.000 aperturas</small></div><div class="bien"><span>Abre una sola vez</span><code>with open(r, "a") as f:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;for dato in datos:</code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f.write(dato)</code><small>1.000 registros = 1 apertura</small></div></div></div></div></div>
+</section>
+<section id="m5" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-dumbbell"></i><h2>Módulo 5: Práctica progresiva</h2><span class="sec-sub">| Del append bien hecho al corte de control</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 35 min</span><span class="pill"><i class="fa-solid fa-laptop-code"></i> Práctica</span></div></header>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-route c-blue"></i> Cómo usar esta práctica</h3><p>Cada ejercicio tiene editor, datos de entrada (cuando usa <code>input()</code>), pista y solución explicada. Los programas trabajan sobre la <b>carpeta simulada</b>: lo que graba un ejercicio queda para el siguiente. Si un resultado no coincide con la salida esperada, tocá <b>Restaurar archivos</b>.</p>
+<p>Todas las soluciones respetan las reglas de la materia: lectura solo con <code>readline()</code> o <code>for … in</code>, alta en <code>"a"</code> y bajas o modificaciones con archivo auxiliar.</p>
+<div class="niveles"><span class="badge b-basico"><i class="fa-solid fa-seedling"></i> Básico: 7'</span><span class="badge b-intermedio"><i class="fa-solid fa-layer-group"></i> Intermedio: 10'</span><span class="badge b-avanzado"><i class="fa-solid fa-rocket"></i> Avanzado: 10'</span><span class="badge b-dios"><i class="fa-solid fa-crown"></i> Nivel Dios: 8'</span></div><div class="explorador" data-explorador></div></div></div>
+<div class="col"><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p><b>Dinámica sugerida:</b> parejas que se rotan los roles. Resolvé en vivo <b>B1</b> (el salto final que falta es un error real que van a encontrar) y <b>A1</b> (la técnica del auxiliar que pide la tarea). <b>D1</b> es la ejercitación del material; <b>D2</b> introduce el corte de control, que conviene anticipar para la próxima clase.</p></aside></div></div>
+<h3 class="nivel-tit c-green"><i class="fa-solid fa-seedling"></i> Nivel básico: append correcto y alta validada</h3>
+<div class="ej-grid"><article class="ej n-basico" id="b1">
+  <div class="ej-head"><span class="ej-id">B1</span><h4>Completar la semana sin que se peguen las líneas</h4><span class="badge b-basico"><i class="fa-solid fa-seedling"></i> Básico</span></div>
+  <div class="ej-enun"><p><code>semana.txt</code> tiene de lunes a jueves, pero su última línea <b>no termina en</b> <code>\n</code>. Agregá <code>Viernes</code>, <code>Sábado</code> y <code>Domingo</code> en modo <code>"a"</code> sin que queden pegados al jueves, y sin repetir días que ya estén. Después mostrá la semana numerada.</p></div><div class="salida-esp"><span>Salida esperada</span><pre>1. Lunes
+2. Martes
+3. Miércoles
+4. Jueves
+5. Viernes
+6. Sábado
+7. Domingo</pre></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="with open(&quot;semana.txt&quot;, &quot;a&quot;, encoding=&quot;UTF-8&quot;) as arch:
+    arch.write(&quot;Viernes\n&quot;)       # ¿qué pasa? Mirá el explorador
+">with open("semana.txt", "a", encoding="UTF-8") as arch:
+    arch.write("Viernes\n")       # ¿qué pasa? Mirá el explorador
+</textarea><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Recorré el archivo una vez guardando la <b>última línea</b> leída y los días en un conjunto. Si la última línea no termina en <code>"\n"</code>, escribí uno antes de agregar.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Primer recorrido con <code>for linea in arch</code>: guardá cada día en <code>existentes</code> (con <code>strip()</code>) y la línea completa en <code>ultima</code>.</li><li>Si <code>ultima</code> no está vacía y <code>not ultima.endswith("\n")</code>, falta el salto: hay que escribirlo antes.</li><li>Abrí en <code>"a"</code> y escribí solo los días que no estén en <code>existentes</code>, cada uno con su <code>\n</code>.</li><li>Para numerar, un segundo recorrido con <code>enumerate(arch, start=1)</code>.</li><li>Ejecutalo dos veces: la segunda no agrega nada porque los días ya existen.</li></ol><div class="win"><pre class="py" data-title="python — solución B1" data-run="1">nuevos = ["Viernes", "Sábado", "Domingo"]
+
+# 1) Recorrido: qué días hay y cómo termina la última línea
+existentes = set()
+ultima = ""
+with open("semana.txt", "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        existentes.add(linea.strip())
+        ultima = linea
+
+# 2) Agregar en modo append, cuidando el salto final
+with open("semana.txt", "a", encoding="UTF-8") as arch:
+    if ultima != "" and not ultima.endswith("\n"):
+        arch.write("\n")                  # completar la última línea
+    for dia in nuevos:
+        if dia not in existentes:
+            arch.write(dia + "\n")
+
+# 3) Mostrar numerado
+with open("semana.txt", "r", encoding="UTF-8") as arch:
+    for i, linea in enumerate(arch, start=1):
+        print(f"{i}. {linea.strip()}")</pre></div></div></details>
+</article><article class="ej n-basico" id="b2">
+  <div class="ej-head"><span class="ej-id">B2</span><h4>Alta de alumnos con validación</h4><span class="badge b-basico"><i class="fa-solid fa-seedling"></i> Básico</span></div>
+  <div class="ej-enun"><p>Agregá alumnos a <code>alumnos.txt</code> en modo <code>"a"</code>, con el formato <code>legajo;apellido, nombre</code>. El legajo debe tener exactamente 6 dígitos y no puede repetirse; el nombre no puede quedar vacío. La carga termina con un legajo vacío (Enter). Al final mostrá el archivo completo.</p></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="with open(&quot;alumnos.txt&quot;, &quot;a&quot;, encoding=&quot;UTF-8&quot;) as arch:
+    legajo = input(&quot;Legajo (Enter para terminar): &quot;)
+">with open("alumnos.txt", "a", encoding="UTF-8") as arch:
+    legajo = input("Legajo (Enter para terminar): ")
+</textarea><label class="ej-ent-lbl">Datos de entrada para <code>input()</code>, uno por línea<textarea class="ej-ent" rows="5" spellcheck="false">567890
+Gómez, Ana
+12a
+123456
+678901
+
+Ruiz, Tomás
+</textarea></label><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Antes de pedir datos, recorré el archivo y guardá los legajos existentes en un conjunto. <code>legajo.isdigit() and len(legajo) == 6</code> valida el formato.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Recorrido inicial: <code>legajos = {linea.split(";")[0] for linea in arch if linea.strip()}</code>.</li><li>Abrí <b>una sola vez</b> en <code>"a"</code> y hacé el bucle de carga adentro del <code>with</code>.</li><li>Validá en orden: formato, duplicado. Si algo falla, avisá y pedí el siguiente legajo.</li><li>Para el nombre, un <code>while</code> que repita mientras esté vacío.</li><li>Agregá el legajo nuevo al conjunto: así se detecta un duplicado dentro de la misma carga.</li></ol><div class="win"><pre class="py" data-title="python — solución B2" data-run="1" data-ent="567890
+Gómez, Ana
+12a
+123456
+678901
+
+Ruiz, Tomás
+">legajos = set()
+with open("alumnos.txt", "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        if linea.strip():
+            legajos.add(linea.split(";")[0])
+
+with open("alumnos.txt", "a", encoding="UTF-8") as arch:
+    legajo = input("Legajo (Enter para terminar): ").strip()
+    while legajo != "":
+        if not (legajo.isdigit() and len(legajo) == 6):
+            print("  El legajo debe tener 6 dígitos")
+        elif legajo in legajos:
+            print("  Ese legajo ya existe")
+        else:
+            nombre = input("Apellido y nombre: ").strip()
+            while nombre == "":
+                nombre = input("  No puede estar vacío. Apellido y nombre: ").strip()
+            arch.write(f"{legajo};{nombre}\n")
+            legajos.add(legajo)
+        legajo = input("Legajo (Enter para terminar): ").strip()
+
+print("\nContenido de alumnos.txt:")
+with open("alumnos.txt", "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        print(linea.strip())</pre></div></div></details>
+</article></div>
+<h3 class="nivel-tit c-orange"><i class="fa-solid fa-layer-group"></i> Nivel intermedio: un recorrido, varios resultados</h3>
+<div class="ej-grid"><article class="ej n-intermedio" id="i1">
+  <div class="ej-head"><span class="ej-id">I1</span><h4>Estadísticas de notas en un solo recorrido</h4><span class="badge b-intermedio"><i class="fa-solid fa-layer-group"></i> Intermedio</span></div>
+  <div class="ej-enun"><p>Recorré <code>notas.txt</code> <b>una sola vez</b> y calculá: cantidad de alumnos, promedio general y la nota más alta con su alumno. Al mismo tiempo, generá <code>promocionados.txt</code> (nota ≥ 7) y <code>recuperan.txt</code> (nota &lt; 4) con el mismo formato del original. Mostrá cuántos registros tiene cada archivo nuevo.</p></div><div class="salida-esp"><span>Salida esperada</span><pre>Alumnos: 10
+Promedio: 6.40
+Nota más alta: 10 (Roma, Pablo Diego)
+promocionados.txt: 5 registros
+recuperan.txt: 2 registros</pre></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="with open(&quot;notas.txt&quot;, &quot;r&quot;, encoding=&quot;UTF-8&quot;) as arch:
+    for linea in arch:
+        legajo, apenom, nota = linea.strip().split(&quot;;&quot;)
+">with open("notas.txt", "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        legajo, apenom, nota = linea.strip().split(";")
+</textarea><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Un mismo <code>with</code> puede abrir tres archivos separados por comas: uno para leer y dos para escribir. Así se recorre el original una sola vez.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Abrí <code>notas.txt</code> en <code>"r"</code> y los dos archivos de salida en <code>"w"</code> en el mismo <code>with</code>.</li><li>Por cada línea: <code>strip()</code>, guardián para líneas vacías, <code>split(";")</code> y <code>int(nota)</code>.</li><li>Acumulá suma y cantidad, y actualizá el máximo guardando también el nombre.</li><li>Según la nota, escribí la línea en el archivo que corresponda, agregando el <code>\n</code> (la última línea del original no lo trae).</li><li>El promedio se calcula al final, con un guardián por si el archivo estuviera vacío.</li></ol><div class="tabla-wrap"><table class="tabla traza"><thead><tr><th>Legajo</th><th>Nombre</th><th>Nota</th><th>Va a…</th></tr></thead><tbody><tr><td>123456</td><td>Roma, Pablo Diego</td><td>10</td><td>promocionados</td></tr><tr><td>123457</td><td>Lezama, Luisa</td><td>8</td><td>promocionados</td></tr><tr><td>123458</td><td>Fernández, Germán</td><td>6</td><td>—</td></tr><tr><td>123464</td><td>Alonso, Facundo</td><td>3</td><td>recuperan</td></tr><tr><td>123465</td><td>Benítez, Lara</td><td>2</td><td>recuperan</td></tr></tbody></table></div><div class="win"><pre class="py" data-title="python — solución I1" data-run="1">cant = suma = 0
+mejor_nota, mejor_alumno = -1, ""
+promo = recup = 0
+
+with open("notas.txt", "r", encoding="UTF-8") as arch, \
+     open("promocionados.txt", "w", encoding="UTF-8") as f_promo, \
+     open("recuperan.txt", "w", encoding="UTF-8") as f_recup:
+    for linea in arch:
+        linea = linea.strip()
+        if not linea:                         # guardián: línea vacía
+            continue
+        legajo, apenom, nota = linea.split(";")
+        nota = int(nota)
+        cant += 1
+        suma += nota
+        if nota &gt; mejor_nota:
+            mejor_nota, mejor_alumno = nota, apenom
+        if nota &gt;= 7:
+            f_promo.write(linea + "\n")
+            promo += 1
+        elif nota &lt; 4:
+            f_recup.write(linea + "\n")
+            recup += 1
+
+if cant &gt; 0:
+    print(f"Alumnos: {cant}")
+    print(f"Promedio: {suma / cant:.2f}")
+    print(f"Nota más alta: {mejor_nota} ({mejor_alumno})")
+    print(f"promocionados.txt: {promo} registros")
+    print(f"recuperan.txt: {recup} registros")
+else:
+    print("El archivo no tiene notas")</pre></div></div></details>
+</article><article class="ej n-intermedio" id="i2">
+  <div class="ej-head"><span class="ej-id">I2</span><h4>Reposición de stock en columnas</h4><span class="badge b-intermedio"><i class="fa-solid fa-layer-group"></i> Intermedio</span></div>
+  <div class="ej-enun"><p>Leé <code>stock.txt</code> (<code>código;descripción;cantidad</code>) y generá <code>reposicion.txt</code> en <b>ancho fijo</b> con los productos que tengan menos de 30 unidades: código en 5 columnas con ceros a la izquierda, descripción en 20 y cantidad a reponer (hasta llegar a 100) en 5. Mostrá también el total de unidades en stock y el producto con más unidades.</p></div><div class="salida-esp"><span>Salida esperada</span><pre>Total de unidades: 500
+Mayor stock: Arroz largo fino (100)
+reposicion.txt:
+'00123 Leche descremada        80\n'
+'00007 Aceite de girasol       85\n'
+'03001 Café instantáneo        78\n'</pre></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="with open(&quot;stock.txt&quot;, &quot;r&quot;, encoding=&quot;UTF-8&quot;) as arch:
+    for linea in arch:
+        cod, desc, cant = linea.strip().split(&quot;;&quot;)
+">with open("stock.txt", "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        cod, desc, cant = linea.strip().split(";")
+</textarea><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Formato: <code>f"{int(cod):05d} {desc:&lt;20} {100 - cant:5d}"</code>. Para verificar el ancho, mostrá las líneas del archivo nuevo con <code>repr()</code>.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Abrí <code>stock.txt</code> para leer y <code>reposicion.txt</code> para escribir en el mismo <code>with</code>.</li><li>Convertí la cantidad a <code>int</code>, acumulá el total y actualizá el máximo.</li><li>Si la cantidad es menor a 30, grabá la línea encolumnada con su <code>\n</code>.</li><li>Recortá la descripción con <code>desc[:20]</code> para que una muy larga no corra las columnas.</li><li>Al final, leé <code>reposicion.txt</code> para mostrarlo: cada línea debe medir lo mismo.</li></ol><div class="win"><pre class="py" data-title="python — solución I2" data-run="1">total = 0
+mayor_cant, mayor_desc = -1, ""
+with open("stock.txt", "r", encoding="UTF-8") as arch, \
+     open("reposicion.txt", "w", encoding="UTF-8") as repo:
+    for linea in arch:
+        linea = linea.strip()
+        if not linea:
+            continue
+        cod, desc, cant = linea.split(";")
+        cant = int(cant)
+        total += cant
+        if cant &gt; mayor_cant:
+            mayor_cant, mayor_desc = cant, desc
+        if cant &lt; 30:
+            repo.write(f"{int(cod):05d} {desc[:20]:&lt;20} {100 - cant:5d}\n")
+
+print("Total de unidades:", total)
+print(f"Mayor stock: {mayor_desc} ({mayor_cant})")
+print("reposicion.txt:")
+with open("reposicion.txt", "r", encoding="UTF-8") as repo:
+    for linea in repo:
+        print(repr(linea))</pre></div></div></details>
+</article></div>
+<h3 class="nivel-tit c-red"><i class="fa-solid fa-rocket"></i> Nivel avanzado: modificación y baja con archivo auxiliar</h3>
+<div class="ej-grid"><article class="ej n-avanzado" id="a1">
+  <div class="ej-head"><span class="ej-id">A1</span><h4>Aumento de precios con archivo auxiliar</h4><span class="badge b-avanzado"><i class="fa-solid fa-rocket"></i> Avanzado</span></div>
+  <div class="ej-enun"><p>Aplicá un aumento del 10 % a los productos de <code>productos.txt</code> que cuesten <b>menos de $1000</b>, redondeando al entero. Usá la técnica del archivo auxiliar: nunca cargues el archivo entero en memoria. Mostrá cada cambio y, al final, el archivo resultante. Si ningún producto cambia, el original debe quedar intacto.</p></div><div class="salida-esp"><span>Salida esperada</span><pre>A002 Alfajor triple             $  800 -&gt; $  880
+A003 Papas fritas 50g           $  850 -&gt; $  935
+A004 Agua mineral 500ml         $  700 -&gt; $  770
+A005 Caramelos surtidos (x10)   $  500 -&gt; $  550
+Productos actualizados: 4
+A001;Gaseosa 500ml;1350
+A002;Alfajor triple;880
+A003;Papas fritas 50g;935
+A004;Agua mineral 500ml;770
+A005;Caramelos surtidos (x10);550</pre></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="import os
+
+with open(&quot;productos.txt&quot;, &quot;r&quot;, encoding=&quot;UTF-8&quot;) as original, \
+     open(&quot;auxiliar.txt&quot;, &quot;w&quot;, encoding=&quot;UTF-8&quot;) as aux:
+    pass
+">import os
+
+with open("productos.txt", "r", encoding="UTF-8") as original, \
+     open("auxiliar.txt", "w", encoding="UTF-8") as aux:
+    pass
+</textarea><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Copiá cada línea al auxiliar: si el precio es menor a 1000, con el precio nuevo; si no, tal cual. Después de cerrar ambos (al salir del <code>with</code>), <code>os.remove</code> y <code>os.rename</code>.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Un solo <code>with</code> abre el original (<code>"r"</code>) y <code>auxiliar.txt</code> (<code>"w"</code>).</li><li>Por línea: <code>split(";")</code>, <code>int(precio)</code>, y si corresponde, <code>round(precio * 1.10)</code>.</li><li>Escribí siempre la línea en el auxiliar (modificada o no) y contá los cambios.</li><li><b>Fuera</b> del <code>with</code>: si hubo cambios, <code>os.remove("productos.txt")</code> y <code>os.rename("auxiliar.txt", "productos.txt")</code>; si no, borrá el auxiliar.</li><li>Agregá un <code>try</code> alrededor: si algo falla a mitad de camino, el original sigue intacto porque recién se toca al final.</li></ol><div class="win"><pre class="py" data-title="python — solución A1" data-run="1">import os
+
+ARCH = "productos.txt"
+cambios = 0
+try:
+    with open(ARCH, "r", encoding="UTF-8") as original, \
+         open("auxiliar.txt", "w", encoding="UTF-8") as aux:
+        for linea in original:
+            linea = linea.strip()
+            if not linea:
+                continue
+            codigo, desc, precio = linea.split(";")
+            precio = int(precio)
+            if precio &lt; 1000:
+                nuevo = round(precio * 1.10)
+                print(f"{codigo} {desc:&lt;26} ${precio:&gt;5} -&gt; ${nuevo:&gt;5}")
+                precio = nuevo
+                cambios += 1
+            aux.write(f"{codigo};{desc};{precio}\n")
+except (OSError, ValueError) as e:
+    print("Error:", e)
+else:
+    if cambios &gt; 0:
+        os.remove(ARCH)                       # los archivos ya están cerrados
+        os.rename("auxiliar.txt", ARCH)
+    else:
+        os.remove("auxiliar.txt")
+    print(f"Productos actualizados: {cambios}")
+
+with open(ARCH, "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        print(linea.strip())</pre></div></div></details>
+</article><article class="ej n-avanzado" id="a2">
+  <div class="ej-head"><span class="ej-id">A2</span><h4>Baja de un alumno con copia de respaldo</h4><span class="badge b-avanzado"><i class="fa-solid fa-rocket"></i> Avanzado</span></div>
+  <div class="ej-enun"><p>Pedí un legajo y dalo de baja de <code>alumnos.txt</code>. Antes de tocar nada, guardá una copia en <code>respaldo/alumnos_bak.txt</code>. Si el legajo no existe, informalo y no modifiques el archivo. Validá que el legajo sea numérico.</p></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="import os
+
+legajo = input(&quot;Legajo a dar de baja: &quot;)
+">import os
+
+legajo = input("Legajo a dar de baja: ")
+</textarea><label class="ej-ent-lbl">Datos de entrada para <code>input()</code>, uno por línea<textarea class="ej-ent" rows="1" spellcheck="false">234567</textarea></label><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>La copia de respaldo se hace línea por línea, igual que el auxiliar. La carpeta <code>respaldo</code> ya existe en el sistema simulado; en tu computadora, creala o usá <code>os.makedirs("respaldo", exist_ok=True)</code>.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Validá el legajo con <code>isdigit()</code> antes de abrir archivos.</li><li>En un mismo recorrido: escribí <b>todas</b> las líneas en el respaldo y, en el auxiliar, todas <b>menos</b> la del legajo buscado.</li><li>Si no se encontró, borrá el auxiliar y avisá. Si se encontró, <code>os.remove</code> + <code>os.rename</code>.</li><li>Mostrá el nombre del alumno dado de baja: lo guardaste al encontrarlo.</li><li>Probá también con un legajo inexistente cambiando los datos de entrada.</li></ol><div class="win"><pre class="py" data-title="python — solución A2" data-run="1" data-ent="234567">import os
+
+ARCH = "alumnos.txt"
+legajo = input("Legajo a dar de baja: ").strip()
+
+if not legajo.isdigit():
+    print("El legajo debe ser numérico")
+else:
+    baja = None
+    try:
+        with open(ARCH, "r", encoding="UTF-8") as original, \
+             open("respaldo/alumnos_bak.txt", "w", encoding="UTF-8") as bak, \
+             open("auxiliar.txt", "w", encoding="UTF-8") as aux:
+            for linea in original:
+                bak.write(linea)                       # copia completa
+                if linea.split(";")[0] == legajo:
+                    baja = linea.strip()               # no va al auxiliar
+                else:
+                    aux.write(linea)
+    except OSError as e:
+        print("Error:", e)
+    else:
+        if baja is None:
+            os.remove("auxiliar.txt")
+            print("No existe el legajo", legajo)
+        else:
+            os.remove(ARCH)
+            os.rename("auxiliar.txt", ARCH)
+            print("Baja:", baja)
+            print("Respaldo guardado en respaldo/alumnos_bak.txt")
+
+with open(ARCH, "r", encoding="UTF-8") as arch:
+    for linea in arch:
+        print(" ", linea.strip())</pre></div></div></details>
+</article></div>
+<h3 class="nivel-tit c-purple"><i class="fa-solid fa-crown"></i> Nivel Dios: longitud variable y corte de control</h3>
+<div class="ej-grid dios"><article class="ej n-dios" id="d1">
+  <div class="ej-head"><span class="ej-id">D1</span><h4>Campos de longitud variable</h4><span class="badge b-dios"><i class="fa-solid fa-crown"></i> Nivel Dios</span></div>
+  <div class="ej-enun"><p>Es la ejercitación del material. Cada campo se graba precedido por <b>dos dígitos</b> que indican su largo:</p><pre class="lv-ej">0612345614Fernando Lopez01A0725000.0</pre><p>(<code>06</code> → <code>123456</code>, <code>14</code> → <code>Fernando Lopez</code>, <code>01</code> → <code>A</code>, <code>07</code> → <code>25000.0</code>). Escribí <code>grabarConLongitudVariable(archivo, modo)</code>, que carga empleados hasta un nombre vacío, y <code>cargarConLongitudVariable(archivo, modo)</code>, que muestra el listado encolumnado.</p></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="def grabarConLongitudVariable(archivo, modo):
+    pass
+
+def cargarConLongitudVariable(archivo, modo):
+    pass
+
+grabarConLongitudVariable(&quot;nominaConLongitudVariable.txt&quot;, &quot;w&quot;)
+cargarConLongitudVariable(&quot;nominaConLongitudVariable.txt&quot;, &quot;r&quot;)
+">def grabarConLongitudVariable(archivo, modo):
+    pass
+
+def cargarConLongitudVariable(archivo, modo):
+    pass
+
+grabarConLongitudVariable("nominaConLongitudVariable.txt", "w")
+cargarConLongitudVariable("nominaConLongitudVariable.txt", "r")
+</textarea><label class="ej-ent-lbl">Datos de entrada para <code>input()</code>, uno por línea<textarea class="ej-ent" rows="5" spellcheck="false">Fernando Lopez
+123456
+a
+25000
+Carla Sanchez
+234567
+b
+20100
+Luis Rodriguez
+312456
+b
+19500
+</textarea></label><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Para grabar: <code>f"{len(texto):02d}{texto}"</code> por cada campo. Para leer, avanzá una posición <code>pos</code>: el largo es <code>int(linea[pos:pos+2])</code> y el dato es <code>linea[pos+2:pos+2+largo]</code>.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Una función auxiliar <code>campo(texto)</code> devuelve el texto precedido por su largo en dos dígitos.</li><li>Al grabar, convertí todo a <code>str</code>: el legajo, la categoría en mayúscula y el sueldo como <code>float</code>.</li><li>Para leer, otra función auxiliar <code>siguiente(linea, pos)</code> devuelve una tupla <code>(dato, nueva_pos)</code>.</li><li>Llamala cuatro veces por línea, encadenando la posición: así se recorren campos de cualquier largo.</li><li>Validá que la categoría tenga un solo carácter y que el sueldo sea numérico.</li></ol><div class="tabla-wrap"><table class="tabla traza"><thead><tr><th>pos</th><th>linea[pos:pos+2]</th><th>largo</th><th>dato</th><th>nueva pos</th></tr></thead><tbody><tr><td>0</td><td>06</td><td>6</td><td>123456</td><td>8</td></tr><tr><td>8</td><td>14</td><td>14</td><td>Fernando Lopez</td><td>24</td></tr><tr><td>24</td><td>01</td><td>1</td><td>A</td><td>27</td></tr><tr><td>27</td><td>07</td><td>7</td><td>25000.0</td><td>36</td></tr></tbody></table></div><div class="win"><pre class="py" data-title="python — solución D1" data-run="1" data-ent="Fernando Lopez
+123456
+a
+25000
+Carla Sanchez
+234567
+b
+20100
+Luis Rodriguez
+312456
+b
+19500
+">def campo(texto):
+    texto = str(texto)
+    return f"{len(texto):02d}{texto}"
+
+def siguiente(linea, pos):
+    largo = int(linea[pos:pos + 2])            # 2 dígitos con el largo
+    dato = linea[pos + 2:pos + 2 + largo]       # el campo propiamente dicho
+    return dato, pos + 2 + largo
+
+def grabarConLongitudVariable(archivo, modo):
+    try:
+        with open(archivo, modo, encoding="UTF-8") as arch:
+            nombre = input("Nombre: ").strip()
+            while nombre != "":
+                legajo = int(input("Legajo: "))
+                cat = input("Categoria: ").strip()
+                while len(cat) != 1:
+                    cat = input("Categoria: ").strip()
+                sueldo = float(input("Sueldo: "))
+                arch.write(campo(legajo) + campo(nombre) + campo(cat.upper()) + campo(sueldo) + "\n")
+                nombre = input("Nombre: ").strip()
+    except OSError:
+        print("No se pudo grabar el archivo.")
+    except ValueError:
+        print("Dato numérico inválido: se cancela la carga.")
+
+def cargarConLongitudVariable(archivo, modo):
+    try:
+        with open(archivo, modo, encoding="UTF-8") as arch:
+            print("Listado archivo:")
+            linea = arch.readline()
+            while linea:
+                linea = linea.strip()
+                legajo, pos = siguiente(linea, 0)
+                nombre, pos = siguiente(linea, pos)
+                categoria, pos = siguiente(linea, pos)
+                sueldo, pos = siguiente(linea, pos)
+                print(f"{int(legajo):06d} {nombre:&lt;30}{categoria} {float(sueldo):14.2f}")
+                linea = arch.readline()
+    except OSError:
+        print("No se pudo leer el archivo.")
+
+grabarConLongitudVariable("nominaConLongitudVariable.txt", "w")
+cargarConLongitudVariable("nominaConLongitudVariable.txt", "r")</pre></div></div></details>
+</article><article class="ej n-dios" id="d2">
+  <div class="ej-head"><span class="ej-id">D2</span><h4>Corte de control: ventas por sucursal</h4><span class="badge b-dios"><i class="fa-solid fa-crown"></i> Nivel Dios</span></div>
+  <div class="ej-enun"><p><code>ventas.txt</code> tiene las ventas <b>ordenadas por sucursal</b> (<code>sucursal;fecha;importe</code>). En un solo recorrido con <code>readline()</code>, mostrá para cada sucursal la cantidad de ventas, el total y la venta más grande; al final, el total general y la sucursal que más vendió. Grabá el resumen en <code>resumen_ventas.txt</code>.</p></div><div class="salida-esp"><span>Salida esperada</span><pre>Centro   ventas: 3  total: $ 35,500.50  máx: $15,000.00
+Norte    ventas: 2  total: $ 15,300.00  máx: $ 9,900.00
+Palermo  ventas: 3  total: $ 39,850.75  máx: $21,000.00
+Sur      ventas: 1  total: $  3,300.00  máx: $ 3,300.00
+Total general: $93,951.25
+Sucursal que más vendió: Palermo ($39,850.75)</pre></div>
+  <div class="practica"><div class="practica-bar"><span><i class="fa-solid fa-keyboard"></i> Tu solución</span><span class="practica-btns"><button class="btn-sec js-reset" type="button">Restaurar</button><button class="btn-run js-run-ej" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button></span></div>
+  <textarea class="editor" spellcheck="false" data-start="with open(&quot;ventas.txt&quot;, &quot;r&quot;, encoding=&quot;UTF-8&quot;) as arch:
+    linea = arch.readline()
+">with open("ventas.txt", "r", encoding="UTF-8") as arch:
+    linea = arch.readline()
+</textarea><pre class="consola" hidden></pre></div>
+  <details class="pista"><summary><i class="fa-regular fa-lightbulb"></i> Ver pista</summary><div><p>Es el algoritmo clásico de <b>corte de control</b>: un <code>while</code> externo por sucursal y uno interno que avanza mientras la sucursal de la línea leída sea la misma. Cuando cambia, se “corta” y se informan los subtotales.</p></div></details>
+  <details class="solucion"><summary><i class="fa-solid fa-key"></i> Ver solución explicada</summary><div><ol class="pasos"><li>Leé la primera línea antes de los bucles y separala en campos con una función <code>leer(arch)</code> que devuelva <code>None</code> al final.</li><li>Bucle externo <code>while reg is not None</code>: guardá la sucursal actual e inicializá contadores.</li><li>Bucle interno <code>while reg is not None and reg[0] == actual</code>: acumulá y leé el siguiente registro.</li><li>Al salir del interno, la sucursal cambió: informá, acumulá al total general y comparalo con el máximo.</li><li>Por qué no <code>for … in</code>: necesitamos leer “de adelanto” la línea que dispara el corte. Es el caso de uso de <code>readline()</code> que menciona la teoría.</li></ol><div class="win"><pre class="py" data-title="python — solución D2" data-run="1">def leer(arch):
+    """Devuelve (sucursal, fecha, importe) o None al final del archivo."""
+    linea = arch.readline()
+    while linea and not linea.strip():         # saltear líneas vacías
+        linea = arch.readline()
+    if not linea:
+        return None
+    suc, fecha, imp = linea.strip().split(";")
+    return suc, fecha, float(imp)
+
+total_general = 0
+mejor_suc, mejor_total = "", -1
+with open("ventas.txt", "r", encoding="UTF-8") as arch, \
+     open("resumen_ventas.txt", "w", encoding="UTF-8") as res:
+    reg = leer(arch)
+    while reg is not None:                         # una vuelta por sucursal
+        actual = reg[0]
+        cant, total, maximo = 0, 0, 0
+        while reg is not None and reg[0] == actual:    # mismas sucursal
+            cant += 1
+            total += reg[2]
+            maximo = max(maximo, reg[2])
+            reg = leer(arch)                       # lectura de adelanto
+        # corte: cambió la sucursal (o terminó el archivo)
+        print(f"{actual:&lt;8} ventas: {cant}  total: ${total:&gt;10,.2f}  máx: ${maximo:&gt;9,.2f}")
+        res.write(f"{actual};{cant};{total:.2f}\n")
+        total_general += total
+        if total &gt; mejor_total:
+            mejor_suc, mejor_total = actual, total
+
+print(f"Total general: ${total_general:,.2f}")
+print(f"Sucursal que más vendió: {mejor_suc} (${mejor_total:,.2f})")</pre></div></div></details>
+</article></div>
+</section>
+<section id="cierre" class="seccion">
+<header class="sec-head"><div class="sec-tit"><i class="fa-solid fa-circle-check"></i><h2>Cierre: repaso, tarea y material</h2><span class="sec-sub">| ¿Qué imprime? Respondé y verificá</span></div><div class="pills"><span class="pill"><i class="fa-regular fa-clock"></i> 5 min</span><span class="pill"><i class="fa-solid fa-graduation-cap"></i> Resumen</span></div></header>
+<div class="row2"><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-bolt c-blue"></i> ¿Qué pasa acá?</h3><div class="quiz"><div class="q" data-exp="El modo &quot;w&quot; vacía el archivo al abrirlo, aunque no se escriba nada."><div class="q-num">1</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1"># notas.txt tiene 10 registros.
+arch = open("notas.txt", "w")
+arch.close()
+# ¿Cuántos registros quedan?</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">10</button><button class="q-op" type="button" data-ok="1">0</button><button class="q-op" type="button" data-ok="0">11</button><button class="q-op" type="button" data-ok="0">Error</button></div><p class="q-fb" aria-live="polite"></p></div></div><div class="q" data-exp="El salto de línea \n es un carácter más: 5 letras + 1."><div class="q-num">2</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1">linea = "Lunes\n"
+print(len(linea))</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">5</button><button class="q-op" type="button" data-ok="1">6</button><button class="q-op" type="button" data-ok="0">7</button><button class="q-op" type="button" data-ok="0">Error</button></div><p class="q-fb" aria-live="polite"></p></div></div><div class="q" data-exp="Al final, readline() devuelve una cadena vacía, que el while interpreta como falsa."><div class="q-num">3</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1"># El archivo ya se leyó completo.
+linea = arch.readline()
+print(repr(linea))</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">None</button><button class="q-op" type="button" data-ok="1">''</button><button class="q-op" type="button" data-ok="0">'\n'</button><button class="q-op" type="button" data-ok="0">EOFError</button></div><p class="q-fb" aria-live="polite"></p></div></div><div class="q" data-exp="write() solo acepta cadenas: hay que usar str(100) o un f-string."><div class="q-num">4</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1">arch = open("datos.txt", "w")
+arch.write(100)</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">Graba 100</button><button class="q-op" type="button" data-ok="0">Graba '100'</button><button class="q-op" type="button" data-ok="1">TypeError</button><button class="q-op" type="button" data-ok="0">ValueError</button></div><p class="q-fb" aria-live="polite"></p></div></div><div class="q" data-exp="\n dentro de la cadena se interpreta como salto de línea. Usá \\, / o r&quot;...&quot;."><div class="q-num">5</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1">ruta = "c:\nuevo\datos.txt"
+# ¿Cuál es el problema?</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">Ninguno</button><button class="q-op" type="button" data-ok="1">Tiene un salto de línea</button><button class="q-op" type="button" data-ok="0">Falta encoding</button><button class="q-op" type="button" data-ok="0">La barra es /</button></div><p class="q-fb" aria-live="polite"></p></div></div><div class="q" data-exp="readlines() carga todo el archivo en memoria; también read(). Se usa readline() o for … in."><div class="q-num">6</div><div class="q-body"><pre class="py q-code" data-run="0" data-bare="1"># ¿Cuál NO está aceptado en la materia
+# para leer un archivo?</pre><div class="q-ops"><button class="q-op" type="button" data-ok="0">readline()</button><button class="q-op" type="button" data-ok="0">for linea in arch</button><button class="q-op" type="button" data-ok="1">readlines()</button><button class="q-op" type="button" data-ok="0">with open(...)</button></div><p class="q-fb" aria-live="polite"></p></div></div></div><p class="q-score" id="q-score">Respondidas: 0 de 6</p></div><div class="card"><h3 class="card-tit"><i class="fa-solid fa-book c-blue"></i> ¿Qué aprendimos hoy?</h3><div class="tiles t2"><div class="tile t-blue"><div class="tile-tit"><i class="fa-solid fa-check"></i> Archivos de texto</div><p>Una línea = un registro; los campos, separados por un delimitador; las líneas, por <code>\n</code>.</p></div><div class="tile t-green"><div class="tile-tit"><i class="fa-solid fa-check"></i> Abrir y cerrar</div><p><code>open(ruta, modo, encoding="UTF-8")</code>; <code>"w"</code> vacía, <code>"a"</code> agrega; siempre cerrar.</p></div><div class="tile t-orange"><div class="tile-tit"><i class="fa-solid fa-check"></i> Leer y escribir</div><p><code>write()</code> con <code>\n</code>; leer con <code>readline()</code> o <code>for … in</code>, y <code>with</code>.</p></div><div class="tile t-purple"><div class="tile-tit"><i class="fa-solid fa-check"></i> CRUD</div><p>Alta en append; baja y modificación con auxiliar + <code>os.remove</code> + <code>os.rename</code>.</p></div></div></div></div><div class="col"><div class="card"><h3 class="card-tit"><i class="fa-solid fa-diagram-project c-blue"></i> Tarea para el Proyecto Final</h3><p><b>Objetivo:</b> reemplazar la información hardcodeada en memoria por almacenamiento persistente en archivos de texto plano (<code>.txt</code>).</p>
+<ol class="pasos"><li><b>Persistencia en archivos de texto:</b> un registro por línea, con los campos separados por un delimitador (por ejemplo <code>;</code>).</li>
+<li><b>Manejo de excepciones</b> al abrir, leer o escribir: archivo inexistente, ruta inválida, permisos insuficientes o errores de escritura.</li>
+<li><b>Adaptación de funciones:</b> alta, baja, modificación y listado trabajan directamente sobre el archivo. El alta agrega en modo append; la baja y la modificación usan un archivo auxiliar temporal.</li>
+<li><b>Archivos auxiliares</b> (si aplica): copias de seguridad u operaciones de reemplazo seguro.</li>
+<li><b>Datos en archivos de texto:</b> cada ejecución lee los datos del archivo, los procesa y los actualiza; nada hardcodeado.</li></ol>
+<p class="muted">Los bloques de alta, baja y modificación del Módulo 4 y los ejercicios A1 y A2 son la base para los puntos 1 a 4.</p></div><div class="card"><h3 class="card-tit"><i class="fa-solid fa-clipboard-check c-blue"></i> Checklist antes de entregar</h3><ul class="lista-ok"><li>¿Todos los <code>open()</code> tienen <code>encoding="UTF-8"</code>?</li>
+<li>¿Uso <code>with</code> o cierro en el <code>finally</code> protegido?</li><li>¿Cada <code>write()</code> termina en <code>\n</code>?</li>
+<li>¿Leo solo con <code>readline()</code> o <code>for … in</code>?</li><li>¿Capturo <code>FileNotFoundError</code> antes que <code>OSError</code>?</li>
+<li>¿Borro y renombro <b>fuera</b> del <code>with</code>?</li></ul></div><div class="card"><h3 class="card-tit"><i class="fa-solid fa-link c-blue"></i> Material complementario y lectura</h3><ul class="lista-ok"><li><a href="https://www.w3schools.com/python/python_file_handling.asp" target="_blank" rel="noopener">w3schools: File Handling</a></li>
+<li><a href="https://www.w3schools.com/python/python_file_open.asp" target="_blank" rel="noopener">w3schools: File Open / Read Files</a></li>
+<li><a href="https://www.w3schools.com/python/python_file_write.asp" target="_blank" rel="noopener">w3schools: File Write / Append / Create</a></li>
+<li><a href="https://www.w3schools.com/python/python_file_remove.asp" target="_blank" rel="noopener">w3schools: Delete Files</a></li>
+<li>Bibliografía obligatoria de la materia.</li>
+<li>Marzal Varó, A.; Gracia Luengo, I.; García Sevilla, P. <i>Introducción a la programación con Python 3</i>. <a href="https://core.ac.uk/download/pdf/61441326.pdf" target="_blank" rel="noopener">Disponible bajo licencia Creative Commons</a>.</li>
+<li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">The Python Tutorial</a> y <a href="https://www.w3schools.com/python/" target="_blank" rel="noopener">Python Tutorial de w3schools</a>.</li></ul></div><aside class="docente"><div class="docente-tit"><i class="fa-solid fa-chalkboard-user"></i> Nota para el docente</div><p>Usá el “¿Qué pasa acá?” como ticket de salida. Si fallan la 1 o la 3, retomalas al comenzar la Clase 12 (archivos JSON): el modo <code>"w"</code> y el fin de archivo vuelven a aparecer ahí.</p></aside></div></div>
+</section>
+<footer class="pie"><span><i class="fa-solid fa-graduation-cap"></i> Programación I, Algoritmos y estructuras de datos I, UADE. Basado en el material de la Clase 11 del Lic. Juan Pablo Nardone.</span><span class="firma">Lic. Santiago Mendoza, MSc.</span></footer>
+</main>
+</div>
+<button class="lanzador" id="lanzador" type="button" aria-expanded="false" aria-controls="cajon"><i class="fa-solid fa-terminal"></i> Consola Python</button>
+<div class="cajon" id="cajon" role="dialog" aria-label="Consola Python">
+  <div class="cab"><strong><i class="fa-solid fa-terminal c-green"></i> Consola Python</strong><button class="btn-mini" id="cerrarCajon" type="button">Cerrar</button></div>
+  <div id="consolaLibre"></div>
+  <details class="caj-arch"><summary><i class="fa-solid fa-folder-open"></i> Carpeta del programa</summary><div class="explorador" data-explorador></div></details>
+</div>
+<script>
+(function(){
+const FS0={"alumnos.txt": "123456;Roma, Pablo Diego\n234567;Lezama, Lucía\n345678;Fernández, Germán\n456789;Pérez, Ludmila\n", "cumpleanios.txt": "12345678\tJuan Pérez\t15-01-1990\n23456789\tAna García\t20-02-1995\n34567890\tLuis Martínez\t10-03-1985\n45678901\tMaría Rodríguez\t05-03-2000\n56789012\tJosé López\t30-04-1982\n67890123\tLaura Sánchez\t25-05-1993\n78901234\tPedro Díaz\t12-06-1990\n89012345\tCarla Mendoza\t28-09-1985\n90123456\tDiego Fernández\t18-08-1988\n01234567\tSofía Castro\t21-09-1999\n12345679\tFernando Torres\t10-10-1987\n23456780\tValentina Ortiz\t12-11-1992\n34567891\tAndrés Romero\t23-12-1989\n45678902\tCamila Morales\t14-01-1991\n56789013\tRafael Jiménez\t03-02-1986\n67890124\tMarta Gutiérrez\t22-02-1984\n78901235\tMartín Salazar\t09-03-1983\n89012346\tEstela Jiménez\t27-04-1994\n90123457\tSantiago López\t18-05-1981\n01234568\tPatricia Álvarez\t30-06-1980\n12345680\tCristian Torres\t15-07-1979\n23456781\tGabriela Núñez\t25-08-1988\n34567892\tJosé Luis Castro\t14-09-1995\n45678903\tIsabel Gómez\t05-10-1990\n56789014\tRicardo Ruiz\t23-11-1987\n67890125\tLucía Méndez\t12-12-1993\n78901236\tFernando Díaz\t07-01-1985\n89012347\tBárbara León\t20-02-1991\n90123458\tJoaquín Cabrera\t09-03-1989\n01234569\tSilvia Paredes\t28-04-1994\n12345681\tAlberto Rojas\t10-05-1983\n23456782\tElena Castro\t21-06-1992\n34567893\tVictor Santos\t03-07-1984\n45678904\tNadia Ortega\t29-08-1986\n56789015\tHoracio Silva\t15-09-1991\n", "nominaEnColumnas.txt": "123123 Juan Pablo                     A         12500.00\n100000 Luis Fernando                  B         13200.00\n", "nominaUnoPorLinea.txt": "123123\nJuan Pablo\nA\n12500.0\n100000\nLuis Fernando\nB\n13200.0\n", "notas.txt": "123456;Roma, Pablo Diego;10\n123457;Lezama, Luisa;8\n123458;Fernández, Germán;6\n123459;Pereyra, Camila;9\n123460;Suárez, Tomás;5\n123461;Medina, Rocío;7\n123462;López, Javier;4\n123463;González, Martina;10\n123464;Alonso, Facundo;3\n123465;Benítez, Lara;2", "productos.txt": "A001;Gaseosa 500ml;1350\nA002;Alfajor triple;800\nA003;Papas fritas 50g;850\nA004;Agua mineral 500ml;700\nA005;Caramelos surtidos (x10);500\n", "semana.txt": "Lunes\nMartes\nMiércoles\nJueves", "solo_lectura.txt": "Este archivo está protegido contra escritura.\n", "stock.txt": "1;Manzanas verdes;34\n12;Pan integral;50\n123;Leche descremada;20\n45;Yerba mate;80\n7;Aceite de girasol;15\n88;Galletitas dulces;60\n15;Arroz largo fino;100\n205;Fideos tirabuzón;44\n3;Sal fina;75\n3001;Café instantáneo;22", "ventas.txt": "Centro;2026-10-01;15000\nCentro;2026-10-01;8200.50\nCentro;2026-10-02;12300\nNorte;2026-10-01;5400\nNorte;2026-10-03;9900\nPalermo;2026-10-02;21000\nPalermo;2026-10-02;7600\nPalermo;2026-10-03;11250.75\nSur;2026-10-01;3300\n"};
+let FS={};
+function cargar(){FS=JSON.parse(JSON.stringify(FS0));}
+cargar();
+const avisar=()=>{clearTimeout(window.__fsT);window.__fsT=setTimeout(()=>document.dispatchEvent(new CustomEvent("fs-cambio")),30);};
+window.fsExiste=p=>Object.prototype.hasOwnProperty.call(FS,p);
+window.fsLeer=p=>FS[p];
+window.fsEscribir=(p,c)=>{FS[p]=c;avisar();};
+window.fsLista=()=>Object.keys(FS).sort();
+window.fsBorrar=p=>{delete FS[p];avisar();};
+window.fsListaTodo=()=>[...new Set([...Object.keys(FS0),...Object.keys(FS)])].sort();
+window.fsOriginal=p=>Object.prototype.hasOwnProperty.call(FS0,p)?FS0[p]:null;
+window.fsRestaurar=()=>{cargar();avisar();};
+})();
+</script>
+<script type="text/python">
+from browser import window
+import sys
+import io as _io
+_DIRS = {"", "respaldo"}
+_SOLO_LECTURA = {"solo_lectura.txt"}
+
+def _norm_ruta(ruta):
+    if not isinstance(ruta, str):
+        raise TypeError("expected str, bytes or os.PathLike object, not " + type(ruta).__name__)
+    for c in ruta:
+        if ord(c) < 32:
+            raise OSError("[Errno 22] Invalid argument: " + repr(ruta))
+    r = ruta.replace("\\", "/")
+    while r.startswith("./"):
+        r = r[2:]
+    return r
+
+def _carpeta(r):
+    return r.rsplit("/", 1)[0] if "/" in r else ""
+
+class _Archivo:
+    def __init__(self, ruta, modo="r", encoding=None, newline=None, **kw):
+        self.ruta = _norm_ruta(ruta)
+        self.modo = str(modo)
+        self.name = ruta
+        self.mode = self.modo
+        self.cerrado = False
+        if self.ruta in _DIRS:
+            raise IsADirectoryError("[Errno 21] Is a directory: '" + ruta + "'")
+        if _carpeta(self.ruta) not in _DIRS:
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + ruta + "'")
+        validos = set("rwaxtb+")
+        if not self.modo or any(c not in validos for c in self.modo) or sum(self.modo.count(c) for c in "rwax") != 1:
+            raise ValueError("invalid mode: '" + self.modo + "'")
+        escribe = any(c in self.modo for c in "wax") or "+" in self.modo
+        if escribe and self.ruta in _SOLO_LECTURA:
+            raise PermissionError("[Errno 13] Permission denied: '" + ruta + "'")
+        if "r" in self.modo:
+            if not window.fsExiste(self.ruta):
+                raise FileNotFoundError("[Errno 2] No such file or directory: '" + ruta + "'")
+            self.buf = str(window.fsLeer(self.ruta))
+        elif "a" in self.modo:
+            self.buf = str(window.fsLeer(self.ruta)) if window.fsExiste(self.ruta) else ""
+            window.fsEscribir(self.ruta, self.buf)
+        elif "x" in self.modo:
+            if window.fsExiste(self.ruta):
+                raise FileExistsError("[Errno 17] File exists: '" + ruta + "'")
+            self.buf = ""
+            window.fsEscribir(self.ruta, "")
+        else:
+            self.buf = ""
+            window.fsEscribir(self.ruta, "")
+        self.pos = len(self.buf) if "a" in self.modo else 0
+    def _chk(self, leer):
+        if self.cerrado:
+            raise ValueError("I/O operation on closed file.")
+        if leer and "r" not in self.modo and "+" not in self.modo:
+            raise _io.UnsupportedOperation("not readable")
+        if not leer and "r" in self.modo and "+" not in self.modo:
+            raise _io.UnsupportedOperation("not writable")
+    def read(self, n=-1):
+        self._chk(True)
+        r = self.buf[self.pos:] if (n is None or n < 0) else self.buf[self.pos:self.pos + n]
+        self.pos += len(r)
+        return r
+    def readline(self):
+        self._chk(True)
+        i = self.buf.find("\n", self.pos)
+        fin = len(self.buf) if i < 0 else i + 1
+        r = self.buf[self.pos:fin]
+        self.pos = fin
+        return r
+    def readlines(self, n=-1):
+        res = []
+        while True:
+            l = self.readline()
+            if not l:
+                break
+            res.append(l)
+        return res
+    def __iter__(self):
+        self._chk(True)
+        return self
+    def __next__(self):
+        l = self.readline()
+        if not l:
+            raise StopIteration
+        return l
+    def write(self, s):
+        self._chk(False)
+        if not isinstance(s, str):
+            raise TypeError("write() argument must be str, not " + type(s).__name__)
+        self.buf += s
+        self.pos = len(self.buf)
+        window.fsEscribir(self.ruta, self.buf)
+        return len(s)
+    def writelines(self, lineas):
+        for l in lineas:
+            self.write(l)
+    def close(self):
+        self.cerrado = True
+    @property
+    def closed(self):
+        return self.cerrado
+    def __enter__(self):
+        return self
+    def __exit__(self, *a):
+        self.close()
+        return False
+
+class _Path:
+    def exists(self, p):
+        r = _norm_ruta(p)
+        return r in _DIRS or bool(window.fsExiste(r))
+    def isfile(self, p):
+        return bool(window.fsExiste(_norm_ruta(p)))
+    def isdir(self, p):
+        return _norm_ruta(p) in _DIRS
+    def join(self, *partes):
+        return "/".join(str(x).rstrip("/") for x in partes if str(x) != "")
+    def getsize(self, p):
+        r = _norm_ruta(p)
+        if not window.fsExiste(r):
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + str(p) + "'")
+        return len(str(window.fsLeer(r)).encode("utf-8"))
+
+class _OS:
+    sep = "/"
+    linesep = "\n"
+    def __init__(self):
+        self.path = _Path()
+    def remove(self, p):
+        r = _norm_ruta(p)
+        if r in _DIRS:
+            raise IsADirectoryError("[Errno 21] Is a directory: '" + str(p) + "'")
+        if not window.fsExiste(r):
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + str(p) + "'")
+        if r in _SOLO_LECTURA:
+            raise PermissionError("[Errno 13] Permission denied: '" + str(p) + "'")
+        window.fsBorrar(r)
+    unlink = remove
+    def rename(self, a, b):
+        ra, rb = _norm_ruta(a), _norm_ruta(b)
+        if not window.fsExiste(ra):
+            raise FileNotFoundError("[WinError 2] El sistema no puede encontrar el archivo especificado: '" + str(a) + "' -> '" + str(b) + "'")
+        if window.fsExiste(rb):
+            raise FileExistsError("[WinError 183] No se puede crear un archivo que ya existe: '" + str(a) + "' -> '" + str(b) + "'")
+        if _carpeta(rb) not in _DIRS:
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + str(b) + "'")
+        window.fsEscribir(rb, window.fsLeer(ra))
+        window.fsBorrar(ra)
+    def replace(self, a, b):
+        ra, rb = _norm_ruta(a), _norm_ruta(b)
+        if not window.fsExiste(ra):
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + str(a) + "'")
+        if window.fsExiste(rb):
+            window.fsBorrar(rb)
+        self.rename(a, b)
+    def listdir(self, p="."):
+        r = _norm_ruta(p)
+        if r == ".":
+            r = ""
+        if r not in _DIRS:
+            raise FileNotFoundError("[Errno 2] No such file or directory: '" + str(p) + "'")
+        res = []
+        for f in window.fsLista():
+            if _carpeta(f) == r:
+                res.append(f.rsplit("/", 1)[-1])
+        for d in _DIRS:
+            if d and _carpeta(d) == r:
+                res.append(d.rsplit("/", 1)[-1])
+        return sorted(res)
+    def getcwd(self):
+        return "C:/Users/alumno/clase11"
+
+_os_sim = _OS()
+
+import types as _types
+_os_mod = _types.ModuleType("os")
+for _k in ("remove", "unlink", "rename", "replace", "listdir", "getcwd", "path", "sep", "linesep"):
+    setattr(_os_mod, _k, getattr(_os_sim, _k))
+
+def _con_os(funcion):
+    viejo = sys.modules.get("os")
+    sys.modules["os"] = _os_mod
+    try:
+        return funcion()
+    finally:
+        if viejo is not None:
+            sys.modules["os"] = viejo
+
+import re as _re
+
+_NO_ENVOLVER = {"os", "sys", "json", "math", "random", "io", "self", "string", "copy", "str", "int", "float", "list", "dict", "print", "True", "False", "None"}
+
+def _nb_(v, nombre, en_func):
+    if type(v).__name__ == "UndefinedType":
+        if en_func:
+            raise UnboundLocalError("cannot access local variable '" + nombre + "' where it is not associated with a value")
+        raise NameError("name '" + nombre + "' is not defined")
+    return v
+
+def _envolver(texto, en_func):
+    res = []
+    i = 0
+    n = len(texto)
+    while i < n:
+        c = texto[i]
+        if c == "#":
+            res.append(texto[i:])
+            break
+        if c in "\"'":
+            q = c * 3 if texto[i:i + 3] == c * 3 else c
+            j = i + len(q)
+            while j < n and texto[j:j + len(q)] != q:
+                j += 2 if texto[j] == "\\" else 1
+            j = min(n, j + len(q))
+            res.append(texto[i:j])
+            i = j
+            continue
+        if c.isalpha() or c == "_":
+            j = i
+            while j < n and (texto[j].isalnum() or texto[j] == "_"):
+                j += 1
+            nombre = texto[i:j]
+            previo = texto[i - 1] if i > 0 else ""
+            es_prefijo = j < n and texto[j] in "\"'" and nombre.lower() in ("f", "r", "b", "rb", "br", "fr", "rf", "u")
+            if es_prefijo:
+                res.append(nombre)
+                i = j
+                continue
+            if (j < n - 1 and texto[j] == "." and (texto[j + 1].isalpha() or texto[j + 1] == "_")
+                    and previo != "." and nombre not in _NO_ENVOLVER):
+                res.append("_nb_(" + nombre + ", '" + nombre + "', " + str(en_func) + ")")
+            else:
+                res.append(nombre)
+            i = j
+            continue
+        res.append(c)
+        i += 1
+    return "".join(res)
+
+def _parche_finally(src):
+    if "finally" not in src:
+        return src
+    lineas = src.split("\n")
+    pila = []
+    dentro = None
+    en_func = False
+    for i, l in enumerate(lineas):
+        s = l.strip()
+        ind = len(l) - len(l.lstrip(" \t"))
+        if s and not s.startswith("#"):
+            while pila and ind <= pila[-1]:
+                pila.pop()
+            if dentro is not None and ind <= dentro:
+                dentro = None
+        if dentro is not None and s:
+            lineas[i] = _envolver(l, en_func)
+        if s.startswith("def ") or s.startswith("async def "):
+            pila.append(ind)
+        m = _re.match(r"^(\s*)finally\s*:(.*)$", l)
+        if m:
+            dentro = ind
+            en_func = bool(pila)
+            resto = m.group(2)
+            if resto.strip() and not resto.strip().startswith("#"):
+                lineas[i] = l[:len(l) - len(resto)] + _envolver(resto, en_func)
+    return "\n".join(lineas)
+
+class _Salida:
+    def __init__(self):
+        self.partes = []
+    def write(self, s):
+        self.partes.append(str(s))
+    def flush(self):
+        pass
+
+def _ejecutar(codigo):
+    out = _Salida()
+    viejo_out, viejo_err = sys.stdout, sys.stderr
+    sys.stdout = out
+    sys.stderr = out
+    error = ""
+    linea = 0
+    try:
+        exec(codigo, {"__name__": "__main__", "open": _Archivo})
+    except BaseException as e:
+        error = type(e).__name__ + ": " + str(e)
+        try:
+            if isinstance(e, SyntaxError) and e.lineno:
+                linea = e.lineno
+            else:
+                tb = e.__traceback__
+                while tb is not None:
+                    if tb.tb_frame.f_code.co_filename in ("<string>", "exec"):
+                        linea = tb.tb_lineno
+                    tb = tb.tb_next
+        except Exception:
+            linea = 0
+    finally:
+        sys.stdout, sys.stderr = viejo_out, viejo_err
+    return [''.join(out.partes), error, linea]
+
+window.pyRun = _ejecutar
+
+class _Limite(BaseException):
+    pass
+
+def _linea_codigo(e):
+    try:
+        tb = e.__traceback__
+        ln = 0
+        while tb is not None:
+            if tb.tb_frame.f_code.co_filename == '<codigo>':
+                ln = tb.tb_lineno
+            tb = tb.tb_next
+        return ln
+    except Exception:
+        return 0
+
+def _consola(src, entradas):
+    out = []
+    feed = [str(x) for x in entradas]
+    cont = [0]
+    def _print(*args, sep=' ', end='\n', file=None, **kw):
+        txt = str(sep).join(str(a) for a in args) + str(end)
+        if file is not None:
+            file.write(txt)
+            return
+        cont[0] += 1
+        if cont[0] > 3000:
+            raise _Limite("El programa imprimió demasiadas líneas. ¿Hay un bucle infinito?")
+        out.append(txt)
+    def _input(prompt=''):
+        out.append(str(prompt))
+        if not feed:
+            raise _Limite("El programa pidió un dato más de los disponibles. Agregá líneas en «Datos de entrada».")
+        v = feed.pop(0)
+        out.append(v + '\n')
+        return v
+    ns = {'print': _print, 'input': _input, '__name__': '__main__', 'open': _Archivo}
+    tipo = ''
+    err = ''
+    linea = 0
+    try:
+        try:
+            codigo = compile(_parche_finally(src), '<codigo>', 'exec')
+        except SyntaxError:
+            codigo = compile(src, '<codigo>', 'exec')
+        ns['_nb_'] = _nb_
+        _con_os(lambda: exec(codigo, ns))
+    except _Limite as e:
+        tipo = 'Límite'
+        err = str(e)
+    except SyntaxError as e:
+        tipo = type(e).__name__
+        err = str(getattr(e, 'msg', e))
+        linea = getattr(e, 'lineno', 0) or 0
+    except BaseException as e:
+        tipo = type(e).__name__
+        err = str(e)
+        linea = _linea_codigo(e)
+    return [''.join(out), tipo, err, linea]
+
+window.pyConsola = _consola
+
+
+</script>
+<script>
+(function(){
+const KW=/\b(def|return|if|elif|else|for|while|in|not|and|or|is|import|from|as|with|break|continue|pass|None|True|False|del|try|except|lambda|global)\b/;
+const BI=/\b(print|len|range|list|sorted|sum|max|min|type|id|enumerate|str|int|float|input|open|round|set|copy)\b/;
+const RE=/(#[^\n]*)|(f?"(?:[^"\\\n]|\\.)*"|f?'(?:[^'\\\n]|\\.)*')|(^[ \t]*[A-Za-z_]\w*(?=[ \t]*(?:[+\-*\/]?=)(?!=)))|(\.[A-Za-z_]\w*(?=\())|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_]\w*)\b/gm;
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function hl(src){
+  let out="",last=0,m;RE.lastIndex=0;
+  while((m=RE.exec(src))){
+    out+=esc(src.slice(last,m.index));last=RE.lastIndex;
+    if(m[1])out+=`<span class="tok-c">${esc(m[1])}</span>`;
+    else if(m[2])out+=`<span class="tok-s">${esc(m[2])}</span>`;
+    else if(m[3]){const ws=m[3].match(/^[ \t]*/)[0];const id=m[3].slice(ws.length);
+      out+=ws+(KW.test(id)?`<span class="tok-k">${id}</span>`:`<span class="tok-v">${id}</span>`);}
+    else if(m[4])out+=`.<span class="tok-m">${esc(m[4].slice(1))}</span>`;
+    else if(m[5])out+=`<span class="tok-n">${m[5]}</span>`;
+    else if(m[6]){const w=m[6];out+=KW.test(w)&&w.match(KW)[0]===w?`<span class="tok-k">${w}</span>`:(BI.test(w)&&w.match(BI)[0]===w?`<span class="tok-b">${w}</span>`:w);}
+    if(m[0].length===0)RE.lastIndex++;
+  }
+  return out+esc(src.slice(last));
+}
+
+/* ---- Python runtime (Brython) ---- */
+let pyListo=false;const espera=[];
+function marcarListo(){pyListo=true;const e=document.getElementById("py-estado");if(e){e.classList.add("listo");e.querySelector("span:last-child").textContent="Python listo para ejecutar";}
+  document.querySelectorAll("[data-espera]").forEach(b=>{b.disabled=false;b.removeAttribute("data-espera");});espera.splice(0).forEach(f=>f());}
+window.__pyListo=marcarListo;
+function correr(src,cb,ents){const go=()=>{const r=window.pyConsola(src,ents||[]);
+  const err=r[1]?(r[1]==="Límite"?r[2]:r[1]+(r[2]?": "+r[2]:"")):"";cb([r[0],err,r[3]]);};
+  if(pyListo&&window.pyConsola)go();else espera.push(go);}
+
+const AYUDAS=[
+ [/FileNotFoundError|No such file|no puede encontrar/i,"El archivo no existe en esa ruta. Revisá el nombre en el explorador de la carpeta."],
+ [/IsADirectoryError/i,"Esa ruta es una carpeta: agregá el nombre del archivo."],
+ [/PermissionError/i,"Sin permiso: archivo de solo lectura o abierto. Cerralo (salí del with) antes de borrar o renombrar."],
+ [/FileExistsError/i,"El destino ya existe: borrá el original con os.remove() antes de os.rename(), o usá os.replace()."],
+ [/not readable|not writable/i,"El modo de open() no corresponde: \"r\" para leer, \"w\" o \"a\" para escribir."],
+ [/unpack/i,"La línea no tiene la cantidad de campos esperada: revisá el separador y si hay líneas vacías (agregá un guardián)."],
+ [/closed file/i,"Usaste el archivo después de cerrarlo: trabajá adentro del bloque with."],
+ [/write\(\) argument must be str/i,"write() solo acepta cadenas: usá str(numero) o un f-string."],
+ [/Invalid argument/i,"La ruta tiene un carácter inválido: \\n dentro de \"c:\\nuevo\" es un salto de línea. Usá \\\\, / o r\"...\"."],
+ [/invalid literal for int/i,"int() recibió algo que no es un número: ¿quedó el \\n pegado o un espacio? Usá strip()."],
+ [/index out of range/i,"Esa línea tiene menos campos de los que esperás: imprimila con repr() antes de indexar."],
+ [/NameError|UnboundLocalError/i,"Variable sin definir. Si es el archivo en el finally, open() falló: protegé el close()."],
+ [/IndentationError|SyntaxError/i,"Error de sintaxis: revisá los dos puntos (:) al final de if/for/while/def/with, los paréntesis y la sangría."]
+];
+function entsDe(pre){return pre.dataset.ent?pre.dataset.ent.split("\n"):[];}
+function pintarSalida(pre,res){
+  pre.hidden=false;pre.innerHTML="";
+  let [out,err,linea]=res&&res.length?[res[0],res[1],res[2]]:["","",0];
+  if(out)pre.append(document.createTextNode(out));
+  if(err){const s=document.createElement("span");s.className="err";s.textContent=(linea?`Línea ${linea} → `:"")+err;pre.append(s);
+    const a=AYUDAS.find(([r])=>r.test(err));if(a){const h=document.createElement("span");h.className="ayuda";h.textContent="💡 "+a[1];pre.append(h);}}
+  if(!out&&!err){const s=document.createElement("span");s.className="meta";s.textContent="(el programa no imprimió nada)";pre.append(s);}
+}
+
+/* ---- code windows ---- */
+document.querySelectorAll("pre.py").forEach(pre=>{
+  const src=pre.textContent;pre.innerHTML=hl(src);
+  if(pre.dataset.bare)return;
+  const win=pre.parentElement,bar=document.createElement("div");bar.className="win-bar";
+  bar.innerHTML=`<span class="d"></span><span class="d"></span><span class="d"></span><span class="titulo"></span>`;
+  bar.querySelector(".titulo").textContent=pre.dataset.title||"python";
+  const copiar=document.createElement("button");copiar.textContent="Copiar";copiar.type="button";
+  copiar.onclick=()=>{const t=win.querySelector("textarea");const txt=t?t.value:src;
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{copiar.textContent="Copiado";setTimeout(()=>copiar.textContent="Copiar",1200)}).catch(()=>{copiar.textContent="No se pudo copiar"});};
+  bar.append(copiar);
+  if(pre.dataset.run==="1"){
+    const ed=document.createElement("button");ed.textContent="Editar";ed.type="button";
+    const run=document.createElement("button");run.className="run";run.type="button";run.innerHTML='<i class="fa-solid fa-play"></i> Ejecutar';
+    const salida=document.createElement("pre");salida.className="consola";salida.hidden=true;
+    ed.onclick=()=>{let t=win.querySelector("textarea");
+      if(t){pre.innerHTML=hl(t.value);t.replaceWith(pre);ed.textContent="Editar";}
+      else{t=document.createElement("textarea");t.spellcheck=false;t.value=pre.dataset.cur||src;t.rows=Math.min(24,src.split("\n").length+1);t.setAttribute("aria-label","Editor de código");pre.replaceWith(t);t.focus();ed.textContent="Ver resaltado";
+        t.addEventListener("input",()=>pre.dataset.cur=t.value);t.addEventListener("keydown",tabular);}
+    };
+    run.onclick=()=>{const t=win.querySelector("textarea");const code=t?t.value:(pre.dataset.cur||src);
+      run.disabled=true;run.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Ejecutando';
+      setTimeout(()=>correr(code,r=>{pintarSalida(salida,r);run.disabled=false;run.innerHTML='<i class="fa-solid fa-play"></i> Ejecutar';},entsDe(pre)),30);};
+    if(pre.dataset.ent){const nt=document.createElement("div");nt.className="ent-nota";nt.innerHTML='<i class="fa-solid fa-keyboard"></i> Datos de entrada: <code></code>';nt.querySelector("code").textContent=entsDe(pre).map(x=>x===""?"⏎ (Enter)":x).join(" · ");win.append(nt);}
+    bar.append(ed,run);win.append(salida);
+  }
+  win.prepend(bar);
+});
+function tabular(e){if(e.key==="Tab"&&!e.shiftKey){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText("    ",s,t.selectionEnd,"end");}}
+
+/* ---- exercise editors ---- */
+document.querySelectorAll(".practica").forEach(p=>{
+  const ta=p.querySelector("textarea"),out=p.querySelector(".consola"),key="ej:"+p.closest(".ej").id;
+  try{const g=localStorage.getItem(key);if(g)ta.value=g;}catch(e){}
+  ta.addEventListener("keydown",tabular);
+  ta.addEventListener("input",()=>{try{localStorage.setItem(key,ta.value)}catch(e){}});
+  p.querySelector(".js-reset").onclick=()=>{ta.value=ta.dataset.start;try{localStorage.removeItem(key)}catch(e){};out.hidden=true;};
+  const run=p.querySelector(".js-run-ej");
+  const entTa=p.querySelector(".ej-ent");
+  run.onclick=()=>{run.disabled=true;setTimeout(()=>correr(ta.value,r=>{pintarSalida(out,r);run.disabled=false;},entTa&&entTa.value!==""?entTa.value.split("\n"):[]),30);};
+});
+
+/* ---- alias simulator ---- */
+const al=document.getElementById("alias");
+if(al){let modo="alias",a=[1,2,3],b=a,ult=null;const mem=al.querySelector(".alias-mem"),msg=al.querySelector(".alias-msg");
+  const caja=(arr,etqs,id)=>`<div class="obj"><div class="etqs">${etqs.map(e=>`<span class="etq">${e}</span>`).join("")}</div><div class="caja">${arr.map((v,i)=>`<span class="${v===99&&i===arr.length-1&&ult?"nuevo":""}">${v}</span>`).join("")}</div><small>id: ${id}</small></div>`;
+  function render(){
+    if(a===b)mem.innerHTML=caja(a,["a","b"],"140321");
+    else mem.innerHTML=caja(a,["a"],"140321")+caja(b,["b"],"140877");
+    if(!ult)msg.innerHTML=modo==="alias"?"<b>b = a</b>: hay <b>un solo objeto</b> con dos etiquetas. <code>a is b</code> → True.":"<b>b = a.copy()</b>: hay <b>dos objetos</b> distintos con el mismo contenido. <code>a is b</code> → False.";
+    else msg.innerHTML=modo==="alias"?`Después de <code>b.append(99)</code>: <code>print(a)</code> → <b>[${a.join(", ")}]</b>. ¡Cambió a, aunque nunca la tocamos!`:`Después de <code>b.append(99)</code>: <code>print(a)</code> → <b>[${a.join(", ")}]</b>. a quedó intacta.`;
+  }
+  function reset(){a=[1,2,3];b=modo==="alias"?a:a.slice();ult=null;render();}
+  al.querySelectorAll("[data-modo]").forEach(btn=>btn.onclick=()=>{modo=btn.dataset.modo;al.querySelectorAll("[data-modo]").forEach(x=>x.classList.toggle("on",x===btn));reset();});
+  al.querySelector('[data-acc="append"]').onclick=()=>{b.push(99);ult=true;render();};
+  al.querySelector('[data-acc="reset"]').onclick=reset;reset();}
+
+/* ---- slicer ---- */
+const sl=document.getElementById("slicer");
+if(sl){const L=[10,20,30,40,50,60],n=L.length;const ini=sl.querySelector("#s-ini"),fin=sl.querySelector("#s-fin"),paso=sl.querySelector("#s-paso");
+  const cel=sl.querySelector(".slicer-celdas"),res=sl.querySelector(".slicer-res");
+  const num=v=>{v=v.trim();if(v==="")return null;if(!/^-?\d+$/.test(v))return NaN;return parseInt(v,10);};
+  function idx(st,sp,sv){ // CPython slice.indices
+    const step=sv===null?1:sv;const lo=step>0?0:-1,hi=step>0?n:n-1;
+    const fix=(v,d)=>{if(v===null)return d;if(v<0){v+=n;if(v<lo)v=lo;}else if(v>hi)v=hi;return v;};
+    const s=fix(st,step>0?lo:hi),e=fix(sp,step>0?hi:lo);const out=[];
+    if(step>0)for(let i=s;i<e;i+=step)out.push(i);else for(let i=s;i>e;i+=step)out.push(i);return out;}
+  function render(){const s=num(ini.value),e=num(fin.value),p=num(paso.value);
+    let elegidos=[],error="";
+    if([s,e,p].some(Number.isNaN))error="Solo números enteros (o vacío).";else if(p===0)error="ValueError: slice step cannot be zero";else elegidos=idx(s,e,p);
+    cel.innerHTML=L.map((v,i)=>{const o=elegidos.indexOf(i);return `<div class="celda ${o>=0?"sel":""}">${o>=0?`<span class="ord">${o+1}</span>`:""}<b>${v}</b><small>${i}</small><small style="color:var(--red)">${i-n}</small></div>`}).join("");
+    const expr=`numeros[${ini.value.trim()}:${fin.value.trim()}${paso.value.trim()!==""?":"+paso.value.trim():""}]`;
+    res.innerHTML=error?`<span class="err">${error}</span>`:`${expr} → [${elegidos.map(i=>L[i]).join(", ")}]`;}
+  [ini,fin,paso].forEach(x=>x.addEventListener("input",render));
+  sl.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const [x,y,z]=b.dataset.p.split(",");ini.value=x;fin.value=y;paso.value=z;render();});
+  ini.value="1";fin.value="4";render();}
+
+/* ---- consola flotante (modelo Clase 9) ---- */
+const EXPLICA={
+  FileNotFoundError:"El archivo (o la carpeta) no existe. En modo <code>\"r\"</code> el archivo tiene que existir. Revisá el nombre y la extensión en el explorador de la carpeta.",
+  IsADirectoryError:"Esa ruta es una <b>carpeta</b>, no un archivo. Agregá el nombre del archivo: <code>respaldo/copia.txt</code>.",
+  PermissionError:"No hay permiso para esa operación: el archivo es de solo lectura o está abierto. Recordá cerrar (salir del <code>with</code>) antes de borrar o renombrar.",
+  FileExistsError:"El archivo de destino ya existe. En Windows, <code>os.rename()</code> no reemplaza: primero <code>os.remove()</code> el original, o usá <code>os.replace()</code>.",
+  UnsupportedOperation:"La operación no coincide con el modo: no se puede leer un archivo abierto con <code>\"w\"</code>/<code>\"a\"</code> ni escribir uno abierto con <code>\"r\"</code>.",
+  ValueError:"Tres causas típicas: <i>too many / not enough values to unpack</i> (la línea no tiene la cantidad de campos esperada: ¿separador correcto? ¿línea vacía?), <i>I/O operation on closed file</i> (usaste el archivo fuera del <code>with</code>) o <code>int()</code> sobre un texto que no es número.",
+  TypeError:"<code>write()</code> solo acepta cadenas: convertí los números con <code>str()</code> o usá un f-string.",
+  OSError:"Error de entrada/salida. Si dice <i>Invalid argument</i>, revisá la ruta: <code>\"c:\\nuevo\"</code> contiene un salto de línea. Usá <code>\\\\</code>, <code>/</code> o <code>r\"...\"</code>.",
+  IndexError:"Se accedió a una posición que no existe. Si la lista viene de <code>split()</code>, la línea tiene menos campos de los esperados: imprimila con <code>repr()</code>.",
+  NameError:"Se usó una variable que no está definida. Si es en el <code>finally</code>, probablemente <code>open()</code> falló y la variable del archivo nunca se creó.",
+  UnboundLocalError:"Se usó una variable local antes de asignarle un valor. Si es el archivo en el <code>finally</code>, <code>open()</code> falló: protegé el <code>close()</code> con <code>except NameError</code>.",
+  AttributeError:"Ese dato no tiene el método pedido. ¿Llamaste a <code>.strip()</code> o <code>.split()</code> sobre algo que no es una cadena?",
+  ZeroDivisionError:"Se dividió por cero: seguramente el archivo estaba vacío y el contador quedó en 0. Agregá un guardián antes de calcular el promedio.",
+  SyntaxError:"El código no respeta la sintaxis de Python. Revisá paréntesis y comillas sin cerrar, y los dos puntos (<code>:</code>) al final de <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>, <code>try</code> y <code>with</code>.",
+  IndentationError:"La sangría no es coherente. Usá 4 espacios por nivel; el código dentro de <code>with</code> va un nivel más adentro.",
+  ImportError:"Esta consola corre en el navegador: solo están disponibles los módulos estándar y un <code>os</code> simulado con <code>remove</code>, <code>rename</code>, <code>replace</code>, <code>listdir</code> y <code>path</code>.",
+  ModuleNotFoundError:"Esta consola corre en el navegador: solo están disponibles los módulos estándar y un <code>os</code> simulado.",
+  "Límite":"La consola cortó la ejecución para que no se cuelgue. Si es un <code>while</code> con <code>readline()</code>, revisá que la lectura siguiente esté al final del bloque."
+};
+function correrConsola(src,ents){const r=window.pyConsola(src,ents);return {salida:r[0],tipo:r[1],error:r[2],linea:r[3]};}
+function pintarConsola(host,r,ed){
+  host.innerHTML="";const term=document.createElement("div");term.className="terminal";
+  let t=r.salida?esc(r.salida):"";
+  if(r.tipo){if(t&&!t.endsWith("\n"))t+="\n";
+    t+='<span class="rojo">'+(r.tipo==="Límite"?esc(r.error):(r.linea?"Error en la línea "+r.linea+"\n":"")+esc(r.tipo)+(r.error?": "+esc(r.error):""))+"</span>";}
+  if(!t)t='<span class="tenue">(el programa no mostró nada)</span>';
+  term.innerHTML=t;host.appendChild(term);
+  if(r.tipo){const ex=document.createElement("div");ex.className="explica";
+    ex.innerHTML="<strong>"+esc(r.tipo==="Límite"?"Ejecución detenida":r.tipo)+".</strong> "+(EXPLICA[r.tipo]||"Error de ejecución.");host.appendChild(ex);
+    if(ed&&r.linea)ed.marcar(r.linea);}
+}
+function crearEditor(host,codigo,alEjecutar){
+  host.classList.add("ed");
+  host.innerHTML='<div class="gutter" aria-hidden="true"></div><div class="area"><pre class="capa" aria-hidden="true"><code></code></pre><textarea spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off" aria-label="Editor de código Python"></textarea></div>';
+  const ta=host.querySelector("textarea"),capa=host.querySelector(".capa"),cod=host.querySelector("code"),gut=host.querySelector(".gutter");
+  ta.value=codigo;let marcada=0;
+  function sync(){cod.innerHTML=hl(ta.value)+"\n";const n=ta.value.split("\n").length;let g="";
+    for(let i=1;i<=n;i++)g+="<span"+(i===marcada?' class="err"':"")+">"+i+"</span>";gut.innerHTML=g;
+    ta.style.height="auto";ta.style.height=(ta.scrollHeight+2)+"px";capa.scrollLeft=ta.scrollLeft;}
+  function insertar(txt){ta.focus();let ok=false;try{ok=document.execCommand("insertText",false,txt);}catch(e){}
+    if(!ok){ta.setRangeText(txt,ta.selectionStart,ta.selectionEnd,"end");marcada=0;sync();}}
+  ta.addEventListener("input",()=>{marcada=0;sync();});
+  ta.addEventListener("scroll",()=>{capa.scrollLeft=ta.scrollLeft;});
+  ta.addEventListener("keydown",ev=>{
+    if(ev.key==="Enter"&&(ev.ctrlKey||ev.metaKey)){ev.preventDefault();alEjecutar&&alEjecutar();return;}
+    const v=ta.value,s0=ta.selectionStart,e0=ta.selectionEnd,ini=v.lastIndexOf("\n",s0-1)+1;
+    if(ev.key==="Tab"){ev.preventDefault();
+      if(ev.shiftKey||s0!==e0){const bIdx=v.indexOf("\n",e0-(e0>s0&&v[e0-1]==="\n"?1:0));const b=bIdx===-1?v.length:bIdx;
+        const nuevo=v.slice(ini,b).split("\n").map(l=>ev.shiftKey?l.replace(/^ {1,4}/,""):"    "+l).join("\n");
+        ta.setSelectionRange(ini,b);insertar(nuevo);ta.setSelectionRange(ini,ini+nuevo.length);}
+      else insertar("    ");return;}
+    if(ev.key==="Enter"){ev.preventDefault();const linea=v.slice(ini,s0);let ind=(linea.match(/^ */)||[""])[0];
+      if(/:\s*(#.*)?$/.test(linea))ind+="    ";insertar("\n"+ind);return;}
+    if(ev.key==="Backspace"&&s0===e0&&s0>ini){const antes=v.slice(ini,s0);
+      if(/^ +$/.test(antes)&&antes.length%4===0){ev.preventDefault();ta.setSelectionRange(s0-4,s0);insertar("");}}
+  });
+  sync();
+  return {get:()=>ta.value,set:v=>{ta.value=v;marcada=0;sync();},marcar:n=>{marcada=n;sync();},foco:()=>ta.focus()};
+}
+function crearEntradas(host,valores,id){
+  const w=document.createElement("div");w.className="entradas";
+  w.innerHTML='<label for="ent-'+id+'">Datos de entrada para <code>input()</code>, uno por línea</label><textarea id="ent-'+id+'" spellcheck="false"></textarea>';
+  const t=w.querySelector("textarea");const fijar=vs=>{t.value=vs.join("\n");t.rows=Math.max(1,Math.min(5,vs.length||1));};fijar(valores);host.appendChild(w);
+  return {get:()=>t.value===""?[]:t.value.split("\n"),set:fijar};
+}
+function crearConsola(host,codigo,entradas,id){
+  const edHost=document.createElement("div");host.appendChild(edHost);let ejecutar;
+  const ed=crearEditor(edHost,codigo,()=>ejecutar());const ent=crearEntradas(host,entradas,id);
+  const barra=document.createElement("div");barra.className="barra-acc";
+  barra.innerHTML='<button class="btn-c" type="button"><i class="fa-solid fa-play"></i> Ejecutar</button><button class="btn-c sec" type="button">Restaurar</button><span class="atajo">Ctrl + Enter ejecuta</span>';
+  host.appendChild(barra);
+  const sal=document.createElement("div");sal.className="consola-salida";sal.setAttribute("aria-live","polite");host.appendChild(sal);
+  const [bEj,bRe]=barra.querySelectorAll("button");let original={codigo,entradas};
+  ejecutar=()=>{const go=()=>pintarConsola(sal,correrConsola(ed.get(),ent.get()),ed);
+    if(pyListo&&window.pyConsola)go();else{sal.innerHTML='<div class="terminal"><span class="tenue">Preparando Python… se ejecuta al terminar.</span></div>';espera.push(go);}};
+  bEj.addEventListener("click",ejecutar);
+  bRe.addEventListener("click",()=>{ed.set(original.codigo);ent.set(original.entradas);sal.innerHTML="";});
+  return {cargar(c,e){original={codigo:c,entradas:e};ed.set(c);ent.set(e);sal.innerHTML="";},ejecutar,foco:ed.foco};
+}
+const cajon=document.getElementById("cajon"),lanzador=document.getElementById("lanzador");
+const libre=crearConsola(document.getElementById("consolaLibre"),
+ '# Escribí código Python y ejecutalo\n# Agrega una nota y muestra el promedio del archivo\nlegajo = input("Legajo: ")\nnombre = input("Apellido y nombre: ")\nnota = int(input("Nota: "))\nwith open("notas.txt", "a", encoding="UTF-8") as arch:\n    arch.write(f"\\n{legajo};{nombre};{nota}")\n\nsuma = cant = 0\nwith open("notas.txt", encoding="UTF-8") as arch:\n    for linea in arch:\n        suma += int(linea.strip().split(";")[2])\n        cant += 1\nprint(f"{cant} notas, promedio {suma / cant:.2f}")\n',["123466","Ríos, Julia","9"],"libre");
+function abrirCajon(){cajon.classList.add("abierto");lanzador.style.display="none";lanzador.setAttribute("aria-expanded","true");}
+function cerrarCajon(){cajon.classList.remove("abierto");lanzador.style.display="";lanzador.setAttribute("aria-expanded","false");lanzador.focus();}
+lanzador.addEventListener("click",()=>{abrirCajon();libre.foco();});
+document.getElementById("cerrarCajon").addEventListener("click",cerrarCajon);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&cajon.classList.contains("abierto"))cerrarCajon();});
+function probarEnConsola(codigo,entradas){libre.cargar(codigo,entradas||[]);abrirCajon();libre.ejecutar();}
+document.querySelectorAll(".win").forEach(win=>{const pre=win.querySelector("pre.py");
+  if(!pre||pre.dataset.run!=="1")return;
+  const b=document.createElement("button");b.type="button";b.className="btn-mini btn-probar";b.innerHTML='<i class="fa-solid fa-terminal"></i> Probar en la consola';
+  b.addEventListener("click",()=>{const t=win.querySelector("textarea");probarEnConsola(t?t.value:(pre.dataset.cur||pre.textContent),entsDe(pre));});
+  win.insertAdjacentElement("afterend",b);});
+
+/* ---- explorador de matriz ---- */
+const mx=document.getElementById("mexp");
+if(mx){const M=[[1,2,3,4],[5,6,7,8],[9,10,11,12]];let vista="celda",ci=2,cj=1;const g=mx.querySelector(".mexp-grid"),r=mx.querySelector(".mexp-res");
+  function render(){let h='<span></span>'+M[0].map((_,j)=>`<span class="hdr">col ${j}</span>`).join("");
+    M.forEach((fila,i)=>{h+=`<span class="hdr">fila ${i}</span>`+fila.map((v,j)=>{let c="";
+      if(vista==="celda"&&i===ci&&j===cj)c="sel";else if(vista==="fila"&&i===ci)c=j===cj?"sel":"hl";else if(vista==="col"&&j===cj)c=i===ci?"sel":"hl";else if(vista==="diag"&&i===j)c="hl";
+      return `<button type="button" class="${c}" data-i="${i}" data-j="${j}" aria-label="fila ${i}, columna ${j}, valor ${v}">${v}</button>`}).join("")});
+    g.innerHTML=h;
+    if(vista==="celda")r.innerHTML=`matriz[${ci}][${cj}] → <b>${M[ci][cj]}</b>`;
+    else if(vista==="fila")r.innerHTML=`matriz[${ci}] → <b>[${M[ci].join(", ")}]</b>`;
+    else if(vista==="col")r.innerHTML=`columna ${cj}: [fila[${cj}] for fila in matriz] → <b>[${M.map(f=>f[cj]).join(", ")}]</b>`;
+    else r.innerHTML=`i == j → <b>[${[0,1,2].map(i=>M[i][i]).join(", ")}]</b><br><span style="font-family:inherit;color:var(--muted)">3x4 no es cuadrada: la “diagonal” solo toca 3 celdas</span>`;}
+  g.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;ci=+b.dataset.i;cj=+b.dataset.j;render();});
+  mx.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{vista=b.dataset.v;mx.querySelectorAll("[data-v]").forEach(x=>x.classList.toggle("on",x===b));render();});
+  render();}
+
+/* ---- aliasing de matrices ---- */
+const ma=document.getElementById("malias");
+if(ma){let modo="mal",hecho=false;const mem=ma.querySelector(".malias-mem"),msg=ma.querySelector(".alias-msg");
+  function render(){const ids=modo==="mal"?["7001","7001","7001"]:["7001","7002","7003"];
+    let filas="";for(let i=0;i<3;i++){const cambia=hecho&&(modo==="mal"||i===0);
+      filas+=`<div class="mrow"><span class="etq">M[${i}]</span><div class="caja"><span class="${cambia?"cambio":""}">${cambia?5:0}</span><span>0</span><span>0</span></div><small>id ${ids[i]}</small></div>`;}
+    mem.innerHTML=`<div class="mrows">${filas}</div>`;
+    if(!hecho)msg.innerHTML=modo==="mal"?"Las tres filas tienen el <b>mismo id</b>: son una sola lista con tres nombres.":"Cada fila tiene <b>su propio id</b>: <code>[0] * 3</code> se evaluó tres veces.";
+    else msg.innerHTML=modo==="mal"?"<code>M[0][0] = 5</code> cambió <b>las tres filas</b>, porque son la misma.":"<code>M[0][0] = 5</code> cambió <b>solo la fila 0</b>.";}
+  ma.querySelectorAll("[data-modo]").forEach(b=>b.onclick=()=>{modo=b.dataset.modo;hecho=false;ma.querySelectorAll("[data-modo]").forEach(x=>x.classList.toggle("on",x===b));render();});
+  ma.querySelector('[data-acc="set"]').onclick=()=>{hecho=true;render();};
+  ma.querySelector('[data-acc="reset"]').onclick=()=>{hecho=false;render();};render();}
+/* ---- simulador de tabla hash ---- */
+const hs=document.getElementById("hashsim");
+if(hs){const N=8;const base={"manzana":1200,"pera":1500,"banana":900,"kiwi":2100,"uva":1800};let tabla;
+  const hsh=k=>{let h=0;for(const c of k)h=(h*31+c.codePointAt(0))%1000003;return h;};
+  const inp=hs.querySelector("#hs-clave"),box=hs.querySelector(".hs-tabla"),msg=hs.querySelector(".hs-msg");
+  function reset(){tabla=Array.from({length:N},()=>[]);Object.entries(base).forEach(([k,v])=>tabla[hsh(k)%N].push([k,v]));render(-1,"");msg.textContent="Tabla con 5 frutas. Probá buscar una que esté y otra que no.";}
+  function render(i,cls){box.innerHTML=tabla.map((c,j)=>`<div class="hs-cas ${j===i?cls:""}"><small>casillero ${j}</small>${c.map(([k,v])=>`<span>"${k}": ${v}</span>`).join("")||'<span style="color:var(--muted)">vacío</span>'}</div>`).join("");}
+  function accion(tipo){const k=inp.value.trim().toLowerCase();if(!k){msg.textContent="Escribí una clave.";return;}
+    const h=hsh(k),i=h%N,esta=tabla[i].find(p=>p[0]===k);
+    if(tipo==="agregar"){if(esta){msg.innerHTML=`"${k}" ya existe: asignar de nuevo solo <b>reemplaza</b> su valor (las claves son únicas).`;render(i,"hit");return;}
+      tabla[i].push([k,0]);render(i,"hit");msg.innerHTML=`hash("${k}") % ${N} = <b>${i}</b> → se guarda en el casillero ${i}.`;return;}
+    render(i,esta?"hit":"miss");
+    msg.innerHTML=`hash("${k}") % ${N} = <b>${i}</b> → se revisa <b>solo</b> el casillero ${i}: ${esta?`encontrada, valor ${esta[1]}.`:"no está (sin recorrer los demás)."} Una lista habría comparado hasta ${tabla.flat().length} elementos.`;}
+  hs.querySelector('[data-hs="buscar"]').onclick=()=>accion("buscar");
+  hs.querySelector('[data-hs="agregar"]').onclick=()=>accion("agregar");
+  hs.querySelector('[data-hs="reset"]').onclick=reset;
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();accion("buscar");}});reset();}
+
+/* ---- diagrama de Venn ---- */
+const vn=document.getElementById("venn");
+if(vn){const A=["Ana","Luis","Sofía","Tomás"],B=["Juli","Luis","Tomás","Valen"];
+  const OPS={"|":{a:1,b:1,i:1,e:"python | datos",r:[...new Set([...A,...B])]},"&":{a:0,b:0,i:1,e:"python & datos",r:A.filter(x=>B.includes(x))},
+    "-":{a:1,b:0,i:0,e:"python - datos",r:A.filter(x=>!B.includes(x))},"r":{a:0,b:1,i:0,e:"datos - python",r:B.filter(x=>!A.includes(x))},
+    "^":{a:1,b:1,i:0,e:"python ^ datos",r:[...A.filter(x=>!B.includes(x)),...B.filter(x=>!A.includes(x))]}};
+  const rA=vn.querySelector(".rA"),rB=vn.querySelector(".rB"),rI=vn.querySelector(".rI"),res=vn.querySelector(".venn-res");
+  function render(op){const o=OPS[op];rA.setAttribute("class","rA"+(o.a?" on":""));rB.setAttribute("class","rB"+(o.b?" on":""));
+    rI.setAttribute("class","rI"+(o.i?" on":((o.a||o.b)?" tapa":"")));
+    if(o.i&&!(o.a||o.b))rI.setAttribute("class","rI on");
+    res.innerHTML=`sorted(${o.e.replace("&","&amp;")}) → <b>[${o.r.sort((x,y)=>x.localeCompare(y)).map(x=>"'"+x+"'").join(", ")}]</b>`;}
+  vn.querySelectorAll("[data-op]").forEach(b=>b.onclick=()=>{vn.querySelectorAll("[data-op]").forEach(x=>x.classList.toggle("on",x===b));render(b.dataset.op);});
+  render("|");}
+
+/* ---- explorador de archivos ---- */
+function crearExplorador(host){
+  let abierto=host.dataset.abrir||"";
+  const ul=document.createElement("div");ul.className="ex-lista";const ver=document.createElement("div");ver.className="ex-ver";
+  host.append(ul,ver);
+  function tam(t){const n=new Blob([t]).size;return n<1024?n+" B":(n/1024).toFixed(1)+" KB";}
+  function render(){const ls=window.fsListaTodo();
+    ul.innerHTML=ls.map(p=>{const existe=window.fsExiste(p),o=window.fsOriginal(p),c=existe?window.fsLeer(p):"";
+      const est=!existe?"eliminado":(o===null?"nuevo":(o===c?"":"modificado"));
+      const ic=p.includes("/")?"fa-regular fa-folder-open":"fa-regular fa-file-lines";
+      return `<button type="button" class="ex-arch ${p===abierto?"on":""} ${existe?"":"ex-borrado"}" data-p="${p}" ${existe?"":"disabled"}><i class="${ic}"></i><span>${p}</span>${est?`<em class="ex-${est}">${est}</em>`:""}<small>${existe?tam(c):""}</small></button>`;}).join("");
+    if(abierto&&window.fsExiste(abierto)){const c=window.fsLeer(abierto);
+      ver.innerHTML=`<div class="ex-cab"><code>${abierto}</code><button type="button" class="btn-mini" data-cerrar>Cerrar</button></div><pre class="ex-txt"></pre>`;
+      const pre=ver.querySelector(".ex-txt");
+      if(c===""){pre.textContent="(archivo vacío)";}
+      else{pre.innerHTML=c.split("\n").map((l,i,a)=>esc(l)+(i<a.length-1?'<span class="ex-nl">\\n</span>':"")).join("\n")+(c.endsWith("\n")?"":'<span class="ex-sinnl">sin \\n final</span>');}
+      ver.querySelector("[data-cerrar]").onclick=()=>{abierto="";render();};}
+    else ver.innerHTML="";}
+  ul.addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b||b.disabled)return;abierto=abierto===b.dataset.p?"":b.dataset.p;render();});
+  document.addEventListener("fs-cambio",render);render();
+}
+document.querySelectorAll("[data-explorador]").forEach(crearExplorador);
+document.querySelectorAll("[data-restaurar]").forEach(b=>b.onclick=()=>{window.fsRestaurar();b.innerHTML='<i class="fa-solid fa-check"></i> Archivos restaurados';setTimeout(()=>b.innerHTML='<i class="fa-solid fa-rotate-left"></i> Restaurar archivos',1500);});
+
+/* ---- simulador de readline ---- */
+const rl=document.getElementById("rl");
+if(rl){let arch="semana.txt",pos=0,strip=false,n=0,fin=false;const txt=rl.querySelector(".rl-txt"),res=rl.querySelector(".rl-res");
+  const contenido=()=>window.fsExiste(arch)?window.fsLeer(arch):"";
+  const rep=t=>"'"+t.replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/'/g,"\\'")+"'";
+  function render(ultimo){const c=contenido();let h="";
+    for(let i=0;i<=c.length;i++){
+      if(i===pos)h+='<span class="rl-cur" aria-label="cursor">▮</span>';
+      if(i===c.length)break;
+      const ch=c[i];const leido=i<pos;
+      h+=ch==="\n"?`<span class="rl-nl ${leido?"rl-leido":""}">\\n</span><br>`:`<span class="${leido?"rl-leido":""}">${esc(ch)}</span>`;}
+    if(!c.endsWith("\n")&&c!=="")h+='<span class="rl-eof">fin del archivo</span>';
+    txt.innerHTML=h;
+    if(ultimo===undefined){res.innerHTML=`<code>arch = open("${arch}")</code>: el cursor está al principio. Tocá <b>readline()</b>.`;return;}
+    const valor=strip?ultimo.trim():ultimo;
+    const cond=valor!=="";
+    res.innerHTML=`<div>Llamada ${n}: <code>linea = ${rep(valor)}</code> (${valor.length} caracteres)</div>`+
+      `<div class="${cond?"rl-v":"rl-f"}"><code>while linea:</code> → <b>${cond?"True: se procesa la línea":"False: el bucle termina"}</b></div>`+
+      (strip||!ultimo.endsWith("\n")||!cond?"":`<div class="muted">Sin <code>strip()</code>, el <code>\\n</code> viene incluido: <code>split(";")</code> dejaría el último campo como ${rep(ultimo.split(";").pop())}.</div>`)+
+      (cond&&!ultimo.endsWith("\n")?`<div class="muted">Esta es la última línea: no termina en <code>\\n</code>.</div>`:"")+
+      (!cond&&fin?`<div class="muted">Seguir llamando a <code>readline()</code> devuelve siempre <code>''</code>.</div>`:"");}
+  function leer(){const c=contenido();if(pos>=c.length){fin=true;n++;render("");return;}
+    const i=c.indexOf("\n",pos),f=i<0?c.length:i+1;const l=c.slice(pos,f);pos=f;n++;render(l);}
+  function reset(){pos=0;n=0;fin=false;render();}
+  rl.querySelectorAll("[data-rl]").forEach(b=>b.onclick=()=>{arch=b.dataset.rl;rl.querySelectorAll("[data-rl]").forEach(x=>x.classList.toggle("on",x===b));reset();});
+  rl.querySelector('[data-rl-acc="leer"]').onclick=leer;
+  rl.querySelector('[data-rl-acc="reset"]').onclick=reset;
+  const bs=rl.querySelector('[data-rl-acc="strip"]');
+  bs.onclick=()=>{strip=!strip;bs.classList.toggle("on",strip);bs.innerHTML=`con <code>.strip()</code>: <b>${strip?"sí":"no"}</b>`;reset();};
+  document.addEventListener("fs-cambio",()=>{if(pos===0)render();});
+  reset();}
+
+/* ---- quiz ---- */
+let resp=0;const total=document.querySelectorAll(".q").length;
+document.querySelectorAll(".q").forEach(q=>{const fb=q.querySelector(".q-fb");
+  q.querySelectorAll(".q-op").forEach(b=>b.onclick=()=>{if(q.dataset.done)return;q.dataset.done=1;resp++;
+    const ok=b.dataset.ok==="1";b.classList.add(ok?"ok":"no");q.querySelector('[data-ok="1"]').classList.add("ok");
+    fb.textContent=(ok?"✔ Correcto. ":"✘ No. ")+q.dataset.exp;q.dataset.bien=ok?1:0;
+    const bien=document.querySelectorAll('.q[data-bien="1"]').length;
+    document.getElementById("q-score").textContent=`Respondidas: ${resp} de ${total} | Correctas: ${bien}`;});});
+
+/* ---- teacher mode ---- */
+const sw=document.getElementById("modo-docente");
+function aplicarModo(on){document.body.classList.toggle("alumno",!on);sw.checked=on;document.getElementById("modo-lbl").textContent=on?"Vista docente":"Vista alumno";}
+let docente=true;try{const g=localStorage.getItem("modo-docente");if(g!==null)docente=g==="1";}catch(e){}
+aplicarModo(docente);sw.onchange=()=>{aplicarModo(sw.checked);try{localStorage.setItem("modo-docente",sw.checked?"1":"0")}catch(e){}};
+
+/* ---- class timer ---- */
+const AG=[["apertura","Apertura",5],["m1","Módulo 1",15],["m2","Módulo 2",25],["pausa","Pausa",10],["m3","Módulo 3",30],["m4","Módulo 4",25],["m5","Módulo 5",35],["cierre","Cierre",5]];
+const ul=document.getElementById("agenda");let acc=0;
+ul.innerHTML=AG.map(([id,t,m])=>{const d=acc;acc+=m;const f=x=>`${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`;return `<li><a href="#${id}" data-ini="${d}" data-fin="${acc}"><span>${t}</span><span>${f(d)}–${f(acc)}</span></a></li>`}).join("");
+let seg=0,tick=null;const reloj=document.getElementById("reloj"),barra=document.getElementById("barra"),bt=document.getElementById("t-play");
+function pintar(){const m=Math.floor(seg/60),s=seg%60;reloj.innerHTML=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")} <small>/ 150:00</small>`;
+  barra.style.width=Math.min(100,seg/90)+"%";const min=seg/60;
+  ul.querySelectorAll("a").forEach(a=>{const i=+a.dataset.ini,f=+a.dataset.fin;a.classList.toggle("activo",seg>0&&min>=i&&min<f);a.classList.toggle("hecho",min>=f);});}
+bt.onclick=()=>{if(tick){clearInterval(tick);tick=null;bt.innerHTML='<i class="fa-solid fa-play"></i> Seguir';}else{tick=setInterval(()=>{seg++;pintar();},1000);bt.innerHTML='<i class="fa-solid fa-pause"></i> Pausar';}};
+document.getElementById("t-reset").onclick=()=>{clearInterval(tick);tick=null;seg=0;bt.innerHTML='<i class="fa-solid fa-play"></i> Iniciar';pintar();};
+pintar();
+
+window.addEventListener("load",()=>{setTimeout(()=>{if(!window.pyRun&&window.brython){try{brython({debug:0})}catch(e){}}
+  const chk=setInterval(()=>{if(window.pyRun){clearInterval(chk);marcarListo();}},150);},50);});
+})();
+</script>
+</body>
+</html>
+</body></html>
